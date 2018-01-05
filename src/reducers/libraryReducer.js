@@ -1,14 +1,32 @@
 import initialState from "./initialState";
+import fire from "../firebase";
 import {
   FETCH_STUFF,
   RECEIVE_STUFF,
-  CHANGE_PUBLICATION_NAME
+  CHANGE_PUBLICATION_NAME,
+  CREATE_NEW_USER
 } from "../actions/allActions";
 
 export default function library(state = initialState.library, action) {
   let newState;
 
   switch (action.type) {
+    case CREATE_NEW_USER:
+      fire
+        .database()
+        .ref("users/" + action.userId)
+        .set({
+          userId: action.userId,
+          email: action.email
+        });
+
+      return {
+        ...state,
+        authenticated: true,
+        email: action.email,
+        firstTimeLogin: true,
+      };
+
     case CHANGE_PUBLICATION_NAME:
       console.log("PUBLICATION NAME CHANGE ACTION", action.name);
       return {

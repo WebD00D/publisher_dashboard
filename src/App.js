@@ -23,12 +23,67 @@ class App extends Component {
     };
   }
 
+ componentDidMount() {}
+
   render() {
     return (
       <div className="App">
-        {!this.props.library.authenticated ? <LoginForm /> : ""}
+        {!this.props.library.authenticated ? <LoginForm /> : "" }
 
-        {this.props.library.authenticated ?   <div>
+        {this.props.library.firstTimeLogin ? (
+          <div className="first-time-container">
+            <h1 style={{ textAlign: "center", fontWeight: "400" }}>Welcome, let's get started!</h1>
+            <p
+              style={{
+                fontFamily: "sans-serif",
+                textAlign: "center",
+                fontSize: "14px",
+                lineHeight: "22px"
+              }}
+            >
+              Your digital content has likely always been free. And, today you
+              start the difficult transition to re-educate your audience that
+              your best content is no longer free.
+            </p>
+
+            <p
+              style={{
+                fontFamily: "sans-serif",
+                textAlign: "center",
+                fontSize: "14px",
+                lineHeight: "22px"
+              }}
+            >
+              But first thing is first, let's finish setting up your account.
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
+              <label
+                style={{
+                  marginBottom: "8px",
+                  fontSize: "10px",
+                  letterSpacing: ".75px"
+                }}
+              >
+                PUBLICATION NAME
+              </label>
+              <input
+                onChange={e => {
+                  this.setState({ email: e.target.value });
+                }}
+                className="form-input"
+                style={{ width: '300px'}}
+                type="textbox"
+
+              />
+            </div>
+          </div>
+        ) : (
+          " "
+        )}
+
+        {this.props.library.authenticated ? (
+          <div>
             {this.state.adding ? (
               <div
                 style={{
@@ -246,9 +301,10 @@ class App extends Component {
               </div>{" "}
               {/* AUTHENTICATED SECTION */}
             </div>
-          </div> : "not authenticated"}
-
-
+          </div>
+        ) : (
+          ""
+        )}
       </div>
     );
   }

@@ -1,5 +1,15 @@
 import * as allActions from "./allActions";
 
+
+// AUTHENTICATION ..
+
+export function createNewUser(userid, email) {
+  return { type: allActions.CREATE_NEW_USER, userId: userid , email: email };
+}
+
+
+// THE 3 FUNCTIONS BELOW ARE JUST SAMPLES AND USED FOR REFERENCE..
+
 export function changePublicationName(pubname) {
   return { type: allActions.CHANGE_PUBLICATION_NAME, name: pubname };
 }
