@@ -23,16 +23,18 @@ class App extends Component {
     };
   }
 
- componentDidMount() {}
+  componentDidMount() {}
 
   render() {
     return (
       <div className="App">
-        {!this.props.library.authenticated ? <LoginForm /> : "" }
+        {!this.props.library.authenticated ? <LoginForm /> : ""}
 
         {this.props.library.firstTimeLogin ? (
           <div className="first-time-container">
-            <h1 style={{ textAlign: "center", fontWeight: "400" }}>Welcome, let's get started!</h1>
+            <h1 style={{ textAlign: "center", fontWeight: "400" }}>
+              Welcome, let's get started!
+            </h1>
             <p
               style={{
                 fontFamily: "sans-serif",
@@ -57,7 +59,13 @@ class App extends Component {
               But first thing is first, let's finish setting up your account.
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", alignItems: 'center' }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center"
+              }}
+            >
               <label
                 style={{
                   marginBottom: "8px",
@@ -72,9 +80,8 @@ class App extends Component {
                   this.setState({ email: e.target.value });
                 }}
                 className="form-input"
-                style={{ width: '300px'}}
+                style={{ width: "300px" }}
                 type="textbox"
-
               />
             </div>
           </div>

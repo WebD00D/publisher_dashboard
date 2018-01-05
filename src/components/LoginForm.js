@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
 import "../App.css";
+import "../Login.css";
+
 import fire from "../firebase";
 
 import { connect } from "react-redux";
@@ -40,7 +42,6 @@ class LoginForm extends Component {
           const newUser = fire.auth().currentUser;
 
           this.props.libraryActions.createNewUser(user.uid, this.state.email);
-
           // fetch(
           //   `https://boardgrab-api.herokuapp.com/send-welcome-email?email=${
           //     this.state.email
@@ -70,16 +71,79 @@ class LoginForm extends Component {
   render() {
     return (
       <div className="App">
+        <div className="login">
+          <div className="login-form">
+            <div
+              style={{
+                marginBottom: "18px",
+                fontWeight: "600",
+                textAlign: "left",
+                color: "#000000",
+                fontSize: "36px",
+                fontFamily: "basic-sans"
+              }}
+            >
+              The Library
+            </div>
+            <div
+              style={{
+                marginBottom: '18px',
+                textAlign: "left",
+                color: "#000000",
+                fontSize: "19px",
+                fontFamily: "karmina"
+              }}
+            >
+              Login to your publisher dashboard
+            </div>
+
+
+            <div className="login-input-wrap">
+              
+            </div>
+
+
+          </div> {/* end login form */}
+          <div className="login-background">
+            <div
+              style={{
+                fontWeight: "600",
+                textAlign: "left",
+                color: "#FFFFFF",
+                fontSize: "66px",
+                fontFamily: "basic-sans"
+              }}
+            >
+              Help preserve the true <br /> art of storytelling.
+            </div>
+
+            <div
+              style={{
+                position: "absolute",
+                bottom: "50px",
+                right: "40px",
+                fontFamily: "sans",
+                color: "#FFFFFF",
+                fontSize: "18px",
+                letterSpacing: ".25px",
+                fontFamily: "karmina"
+              }}
+            >
+              Publisher's Dashboard
+            </div>
+          </div>
+        </div>
+
         <div
           style={{
+            display: "none",
             maxWidth: "400px",
             marginLeft: "auto",
             marginRight: "auto",
             marginTop: "60px",
             textAlign: "left",
             backgroundColor: "#FFFFFF",
-
-            borderRadius: "12px",
+            borderRadius: "4px",
             position: "relative"
           }}
         >
@@ -98,8 +162,8 @@ class LoginForm extends Component {
                 backgroundColor: "#000000",
                 alignItems: "center",
                 position: "absolute",
-                borderTopLeftRadius: "12px",
-                borderTopRightRadius: "12px"
+                borderTopLeftRadius: "4px",
+                borderTopRightRadius: "4px"
               }}
             >
               <div style={{ paddingLeft: "20px" }}>
