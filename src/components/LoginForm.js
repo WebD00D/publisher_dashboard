@@ -18,14 +18,67 @@ class LoginForm extends Component {
     this._handleAccountSignIn = this._handleAccountSignIn.bind(this);
     this._handleAccountCreation = this._handleAccountCreation.bind(this);
 
+    this._handleAuthentication = this._handleAuthentication.bind(this);
+
     this.state = {
       email: "",
       password: "",
-      errorMessage: ""
+      hasError: false,
+      errorMessage: "",
+      buttonText: "Login",
+      signingIn: true,
+      signingUp: false,
+      helpText: "Forgot password?",
+      publicationName: "",
+      email: "",
+      password: "",
+      loading: false,
     };
   }
 
-  _handleAccountSignIn() {}
+  _handleAccountSignIn() {
+    fire
+      .auth()
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .then(
+        function(user) {
+          fire
+            .database()
+            .ref("publications/" + user.uid)
+            .once("value")
+            .then(
+              function(snapshot) {
+                console.log("SIGN IN SNAPSHOT", snapshot.val());
+                this.props.libraryActions.setCurrentUser(
+                  user.uid,
+                  snapshot.val().email,
+                  snapshot.val().publication
+                );
+              }.bind(this)
+            );
+
+          this.setState({
+            loading: false,
+            hasError: false
+          });
+        }.bind(this)
+      )
+      .catch(
+        function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+
+          this.setState({
+            errorMessage,
+            loading: false,
+            hasError: true
+          });
+
+          // ...
+        }.bind(this)
+      );
+  }
 
   _handleAccountCreation() {
     console.log(
@@ -41,14 +94,18 @@ class LoginForm extends Component {
         function(user) {
           const newUser = fire.auth().currentUser;
 
-          this.props.libraryActions.createNewUser(user.uid, this.state.email);
-          // fetch(
-          //   `https://boardgrab-api.herokuapp.com/send-welcome-email?email=${
-          //     this.state.email
-          //   }`
-          // ).then(function(response) {
-          //   console.log("RESPONSE", response);
-          // });
+          this.props.libraryActions.createNewUser(
+            user.uid,
+            this.state.email,
+            this.state.publicationName
+          );
+
+          this.setState({
+            loading: false,
+            hasError: false
+          });
+
+          // WILL NEED TO HIT AN API TO SEND WELCOME EMAIL. ( using PostMark ) ...
         }.bind(this)
       )
       .catch(
@@ -62,20 +119,62 @@ class LoginForm extends Component {
             }`
           );
           this.setState({
-            error: errorMessage
+            errorMessage: errorMessage,
+            loading: false,
+            hasError: true
           });
         }.bind(this)
       );
   }
 
+  _handleAuthentication() {
+    this.setState({
+      loading: true
+    });
+
+    this.state.signingIn
+      ? this._handleAccountSignIn()
+      : this._handleAccountCreation();
+  }
+
   render() {
     return (
       <div className="App">
+        {this.state.hasError ? (
+          <div
+            style={{
+              position: 'absolute',
+              color: "#FFFFFF",
+              backgroundColor: "#C0392B",
+              fontFamily: "basic-sans",
+              width: "100%",
+              top: '0px',
+              height: '32px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 1,
+            }}
+          >
+            {this.state.errorMessage}
+          </div>
+        ) : (
+          ""
+        )}
+
+        {this.state.loading ? (
+          <div className="loader-wrap">
+            <div className="loader">Loading...</div>
+          </div>
+        ) : (
+          ""
+        )}
+
         <div className="login">
           <div className="login-form">
             <div
               style={{
-                marginBottom: "18px",
+                marginBottom: "12px",
                 fontWeight: "600",
                 textAlign: "left",
                 color: "#000000",
@@ -87,7 +186,7 @@ class LoginForm extends Component {
             </div>
             <div
               style={{
-                marginBottom: '18px',
+                marginBottom: "24px",
                 textAlign: "left",
                 color: "#000000",
                 fontSize: "19px",
@@ -95,15 +194,96 @@ class LoginForm extends Component {
               }}
             >
               Login to your publisher dashboard
+
             </div>
 
+            {this.state.signingUp ? (
+              <div className="login-input-wrap">
+                <div className="login-input__icon">
+                  <img src={require("../images/icons8-magazine-50.png")} />
+                </div>
+                <div className="login-input__input">
+                  <input
+                    onChange={e =>
+                      this.setState({ publicationName: e.target.value })
+                    }
+                    placeholder="Publication name"
+                    type="text"
+                  />
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
 
             <div className="login-input-wrap">
-              
+              <div className="login-input__icon">
+                <img src={require("../images/icons8-customer-50.png")} />
+              </div>
+              <div className="login-input__input">
+                <input
+                  onChange={e => this.setState({ email: e.target.value })}
+                  placeholder="Email address"
+                  type="text"
+                />
+              </div>
             </div>
 
+            <div className="login-input-wrap">
+              <div className="login-input__icon">
+                <img src={require("../images/icons8-key-50.png")} />
+              </div>
+              <div className="login-input__input">
+                <input
+                  onChange={e => this.setState({ password: e.target.value })}
+                  placeholder="Password"
+                  type="password"
+                />
+              </div>
+            </div>
 
-          </div> {/* end login form */}
+            <div className="login-action-wrap">
+              <a className="help-link" href="#">
+                {this.state.helpText}
+              </a>
+              <button onClick={() => this._handleAuthentication()}>
+                {this.state.buttonText}
+              </button>
+            </div>
+
+            {this.state.signingIn ? (
+              <a
+                href="#"
+                onClick={() =>
+                  this.setState({
+                    signingIn: false,
+                    signingUp: true,
+                    buttonText: "Sign Up",
+                    helpText: "Need some help?"
+                  })
+                }
+                className="other-action-link"
+              >
+                Don't have a publisher's account?
+              </a>
+            ) : (
+              <a
+                href="#"
+                onClick={() =>
+                  this.setState({
+                    signingIn: true,
+                    signingUp: false,
+                    buttonText: "Login",
+                    helpText: "Forgot password?"
+                  })
+                }
+                className="other-action-link"
+              >
+                I've already got an account.
+              </a>
+            )}
+          </div>{" "}
+          {/* end login form */}
           <div className="login-background">
             <div
               style={{
@@ -111,17 +291,18 @@ class LoginForm extends Component {
                 textAlign: "left",
                 color: "#FFFFFF",
                 fontSize: "66px",
-                fontFamily: "basic-sans"
+                fontFamily: "basic-sans",
+                letterSpacing: "1px"
               }}
             >
-              Help preserve the true <br /> art of storytelling.
+              Preserving the true <br /> art of storytelling.
             </div>
 
             <div
               style={{
                 position: "absolute",
                 bottom: "50px",
-                right: "40px",
+                left: "40px",
                 fontFamily: "sans",
                 color: "#FFFFFF",
                 fontSize: "18px",
@@ -129,7 +310,7 @@ class LoginForm extends Component {
                 fontFamily: "karmina"
               }}
             >
-              Publisher's Dashboard
+              The Library's Publisher Dashboard
             </div>
           </div>
         </div>

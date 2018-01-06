@@ -3,8 +3,12 @@ import * as allActions from "./allActions";
 
 // AUTHENTICATION ..
 
-export function createNewUser(userid, email) {
-  return { type: allActions.CREATE_NEW_USER, userId: userid , email: email };
+export function createNewUser(userid, email, publication) {
+  return { type: allActions.CREATE_NEW_USER, userId: userid , email: email, publication: publication };
+}
+
+export function setCurrentUser(userid, email, publication) {
+  return { type: allActions.SET_CURRENT_USER, userId: userid , email: email, publication: publication };
 }
 
 

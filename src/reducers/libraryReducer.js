@@ -4,7 +4,8 @@ import {
   FETCH_STUFF,
   RECEIVE_STUFF,
   CHANGE_PUBLICATION_NAME,
-  CREATE_NEW_USER
+  CREATE_NEW_USER,
+  SET_CURRENT_USER
 } from "../actions/allActions";
 
 export default function library(state = initialState.library, action) {
@@ -14,17 +15,28 @@ export default function library(state = initialState.library, action) {
     case CREATE_NEW_USER:
       fire
         .database()
-        .ref("users/" + action.userId)
+        .ref("publications/" + action.userId)
         .set({
           userId: action.userId,
-          email: action.email
+          email: action.email,
+          publication: action.publication
         });
 
       return {
         ...state,
         authenticated: true,
         email: action.email,
-        firstTimeLogin: true,
+        publication: action.publication,
+        publicationId: action.userId
+      };
+
+    case SET_CURRENT_USER:
+      return {
+        ...state,
+        authenticated: true,
+        email: action.email,
+        publication: action.publication,
+        publicationId: action.userId
       };
 
     case CHANGE_PUBLICATION_NAME:
