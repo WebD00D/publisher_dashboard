@@ -32,6 +32,10 @@ class App extends Component {
         {!this.props.library.authenticated ? <LoginForm /> : ""}
 
         {this.props.library.authenticated ? <Dashboard /> : ""}
+
+
+
+
       </div>
     );
   }

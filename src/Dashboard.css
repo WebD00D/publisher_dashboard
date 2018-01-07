@@ -85,6 +85,15 @@
   font-family: "basic-sans";
 }
 
+.dashboard__content-subtitle {
+  width: 100%;
+  font-size: 20px;
+  display: flex;
+  justify-content: space-between;
+
+  font-family: "basic-sans";
+}
+
 .dashboard__button {
   height: 42px;
   width: 150px;
@@ -106,6 +115,30 @@
 .dashboard__button:focus,
 .dashboard__button:active {
   outline: none;
+}
+
+
+.billing-options {
+  margin-top: 28px;
+  padding-left: 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+.billing-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.billing-option img {
+  height: 40px;
+}
+
+.billing-option__text {
+  margin-left: 22px;
+  font-size: 16px;
+  font-family: "basic-sans";
 }
 
 
@@ -215,4 +248,24 @@ li {
 .title {
   text-align: center;
   color: rgb(69, 113, 236);
+}
+
+.add-content-wrap {
+  top: 0px;
+  z-index: 2;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(01,01,01,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-content-form {
+  width: 400px;
+  padding: 40px;
+
+  border-radius: 4px;
+  background-color: #FFFFFF;
 }

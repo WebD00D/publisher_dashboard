@@ -1,8 +1,9 @@
 export default {
   library: {
-    authenticated: false,
+    authenticated: true,
     publicationId: "",
     publication: "Stab Magazine",
+    billingInfoSetup: false,
     slugs: []
   }
 };

@@ -33,7 +33,10 @@ class Dashboard extends Component {
       publicationName: "",
       email: "",
       password: "",
-      loading: false
+      loading: false,
+      contentURL: "",
+
+      addingNewContent: false
     };
   }
 
@@ -175,142 +178,195 @@ class Dashboard extends Component {
               <div className="dashboard__menu-item ">My Account</div>
               <div className="dashboard__menu-item ">Sign Out</div>
             </div>
-            <div className="dashboard__content">
-              <div className="dashboard__block">
-                <div className="dashboard__content-title">
-                  <div style={{ paddingLeft: "40px" }}>
-                    Your Premium Content
+
+            {this.state.addingNewContent ? (
+              <div className="add-content-wrap">
+                <div className="add-content-form">
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-website-50.png")} />
+                    </div>
+                    <div className="login-input__input">
+                      <input
+                        onChange={e =>
+                          this.setState({ contentURL: e.target.value })
+                        }
+                        placeholder="Content URL"
+                        type="text"
+                      />
+                    </div>
                   </div>
-                  <button className="dashboard__button">Add New</button>
                 </div>
+              </div>
+            ) : (
+              ""
+            )}
 
-                <div className="publisher-content">
-                  <div className="publisher-content__headline">
-                    <div className="slug">Content URL</div>
-                    <div className="price">Price</div>
-                    <div className="is-active">Active</div>
-                  </div>
+            {/* If billingInfoSetup is false, show them setup  */}
+            {/* either add Paypal email, or addressee and address so we can send them a check */}
 
-                  <div className="publisher-content__row">
-                    <div className="slug">
-                      /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                    </div>
-                    <div className="price">$0.20</div>
-                    <div className="is-active">
-                      <input
-                        className="styled-checkbox"
-                        id="styled-checkbox-1"
-                        type="checkbox"
-                        value="value1"
-                      />
-                      <label for="styled-checkbox-1" />
+            {!this.props.library.billingInfoSetup ? (
+              <div className="dashboard__content">
+                <div className="dashboard__block">
+                  <div className="dashboard__content-title">
+                    <div style={{ paddingLeft: "40px" }}>
+                      Welcome, {this.props.library.publication}!
                     </div>
                   </div>
-
-                  <div className="publisher-content__row">
-                    <div className="slug">
-                      /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                    </div>
-                    <div className="price">$0.20</div>
-                    <div className="is-active">
-                      <input
-                        className="styled-checkbox"
-                        id="styled-checkbox-2"
-                        type="checkbox"
-                        value="value1"
-                      />
-                      <label for="styled-checkbox-2" />
+                  <div className="dashboard__content-subtitle">
+                    <div style={{ paddingLeft: "40px", opacity: 0.6, marginTop: "12px" }}>
+                      Before you get started, tell us how you'd like to get paid.
                     </div>
                   </div>
 
-                  <div className="publisher-content__row">
-                    <div className="slug">
-                      /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                  <div className="billing-options">
+
+                    <div className="billing-option">
+                      <img src={require("../images/icons8-paypal-50.png")} />
+                      <div className="billing-option__text">Pay us through Paypal</div>
                     </div>
-                    <div className="price">$0.20</div>
-                    <div className="is-active">
-                      <input
-                        className="styled-checkbox"
-                        id="styled-checkbox-3"
-                        type="checkbox"
-                        value="value1"
-                      />
-                      <label for="styled-checkbox-3" />
+
+                    <div className="billing-option">
+                      <img src={require("../images/icons8-check-book-50.png")} />
+                      <div className="billing-option__text">We'd like to be sent a check</div>
                     </div>
+
                   </div>
-
-                  <div className="publisher-content__row">
-                    <div className="slug">
-                      /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                    </div>
-                    <div className="price">$0.20</div>
-                    <div className="is-active">
-                      <input
-                        className="styled-checkbox"
-                        id="styled-checkbox-4"
-                        type="checkbox"
-                        value="value1"
-                      />
-                      <label for="styled-checkbox-4" />
-                    </div>
-                  </div>
-
-                  <div className="publisher-content__row">
-                    <div className="slug">
-                      /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                    </div>
-                    <div className="price">$0.20</div>
-                    <div className="is-active">
-                      <input
-                        className="styled-checkbox"
-                        id="styled-checkbox-5"
-                        type="checkbox"
-                        value="value1"
-                      />
-                      <label for="styled-checkbox-5" />
-                    </div>
-                  </div>
-
-
-                  <div className="publisher-content__row">
-                    <div className="slug">
-                      /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                    </div>
-                    <div className="price">$0.20</div>
-                    <div className="is-active">
-                      <input
-                        className="styled-checkbox"
-                        id="styled-checkbox-6"
-                        type="checkbox"
-                        value="value1"
-                      />
-                      <label for="styled-checkbox-6" />
-                    </div>
-                  </div>
-
-
-                  <div className="publisher-content__row">
-                    <div className="slug">
-                      /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                    </div>
-                    <div className="price">$0.20</div>
-                    <div className="is-active">
-                      <input
-                        className="styled-checkbox"
-                        id="styled-checkbox-7"
-                        type="checkbox"
-                        value="value1"
-                      />
-                      <label for="styled-checkbox-7" />
-                    </div>
-                  </div>
-
-
-
 
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="dashboard__content">
+                <div className="dashboard__block">
+                  <div className="dashboard__content-title">
+                    <div style={{ paddingLeft: "40px" }}>
+                      Your Premium Content
+                    </div>
+                    <button className="dashboard__button">Add New</button>
+                  </div>
+
+                  <div className="publisher-content">
+                    <div className="publisher-content__headline">
+                      <div className="slug">Content URL</div>
+                      <div className="price">Price</div>
+                      <div className="is-active">Active</div>
+                    </div>
+
+                    <div className="publisher-content__row">
+                      <div className="slug">
+                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                      </div>
+                      <div className="price">$0.20</div>
+                      <div className="is-active">
+                        <input
+                          className="styled-checkbox"
+                          id="styled-checkbox-1"
+                          type="checkbox"
+                          value="value1"
+                        />
+                        <label htmlFor="styled-checkbox-1" />
+                      </div>
+                    </div>
+
+                    <div className="publisher-content__row">
+                      <div className="slug">
+                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                      </div>
+                      <div className="price">$0.20</div>
+                      <div className="is-active">
+                        <input
+                          className="styled-checkbox"
+                          id="styled-checkbox-2"
+                          type="checkbox"
+                          value="value1"
+                        />
+                        <label htmlFor="styled-checkbox-2" />
+                      </div>
+                    </div>
+
+                    <div className="publisher-content__row">
+                      <div className="slug">
+                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                      </div>
+                      <div className="price">$0.20</div>
+                      <div className="is-active">
+                        <input
+                          className="styled-checkbox"
+                          id="styled-checkbox-3"
+                          type="checkbox"
+                          value="value1"
+                        />
+                        <label htmlFor="styled-checkbox-3" />
+                      </div>
+                    </div>
+
+                    <div className="publisher-content__row">
+                      <div className="slug">
+                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                      </div>
+                      <div className="price">$0.20</div>
+                      <div className="is-active">
+                        <input
+                          className="styled-checkbox"
+                          id="styled-checkbox-4"
+                          type="checkbox"
+                          value="value1"
+                        />
+                        <label htmlFor="styled-checkbox-4" />
+                      </div>
+                    </div>
+
+                    <div className="publisher-content__row">
+                      <div className="slug">
+                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                      </div>
+                      <div className="price">$0.20</div>
+                      <div className="is-active">
+                        <input
+                          className="styled-checkbox"
+                          id="styled-checkbox-5"
+                          type="checkbox"
+                          value="value1"
+                        />
+                        <label htmlFor="styled-checkbox-5" />
+                      </div>
+                    </div>
+
+                    <div className="publisher-content__row">
+                      <div className="slug">
+                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                      </div>
+                      <div className="price">$0.20</div>
+                      <div className="is-active">
+                        <input
+                          className="styled-checkbox"
+                          id="styled-checkbox-6"
+                          type="checkbox"
+                          value="value1"
+                        />
+                        <label htmlFor="styled-checkbox-6" />
+                      </div>
+                    </div>
+
+                    <div className="publisher-content__row">
+                      <div className="slug">
+                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
+                      </div>
+                      <div className="price">$0.20</div>
+                      <div className="is-active">
+                        <input
+                          className="styled-checkbox"
+                          id="styled-checkbox-7"
+                          type="checkbox"
+                          value="value1"
+                        />
+                        <label htmlFor="styled-checkbox-7" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>{" "}
         {/* end dashboard */}

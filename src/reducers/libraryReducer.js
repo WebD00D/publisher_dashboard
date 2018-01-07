@@ -19,7 +19,8 @@ export default function library(state = initialState.library, action) {
         .set({
           userId: action.userId,
           email: action.email,
-          publication: action.publication
+          publication: action.publication,
+          billingInfoSetup: false
         });
 
       return {

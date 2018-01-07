@@ -193,7 +193,9 @@ class LoginForm extends Component {
                 fontFamily: "karmina"
               }}
             >
-              Login to your publisher dashboard
+
+
+              { this.state.signingUp ? "Signup for a publisher account" : "  Login to your publisher dashboard" }
 
             </div>
 
