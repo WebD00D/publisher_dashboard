@@ -117,7 +117,6 @@
   outline: none;
 }
 
-
 .billing-options {
   margin-top: 28px;
   padding-left: 40px;
@@ -138,6 +137,26 @@
 .billing-option__text {
   margin-left: 22px;
   font-size: 16px;
+  font-family: "basic-sans";
+}
+
+.billing-or {
+  margin-left: 22px;
+  font-size: 16px;
+  font-family: "basic-sans";
+}
+
+.billing-option-label {
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-family: "basic-sans";
+}
+
+.billing-option-error {
+  margin-bottom: 12px;
+  margin-top: 24px;
+  font-size: 16px;
+  color: #D64541;
   font-family: "basic-sans";
 }
 

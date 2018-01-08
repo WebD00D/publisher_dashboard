@@ -215,21 +215,61 @@ class Dashboard extends Component {
                   </div>
                   <div className="dashboard__content-subtitle">
                     <div style={{ paddingLeft: "40px", opacity: 0.6, marginTop: "12px" }}>
-                      Before you get started, tell us how you'd like to get paid.
+                      Before you get started, tell us how you'd like to get your monthly payouts.
                     </div>
                   </div>
 
                   <div className="billing-options">
 
-                    <div className="billing-option">
-                      <img src={require("../images/icons8-paypal-50.png")} />
-                      <div className="billing-option__text">Pay us through Paypal</div>
+
+                    <div className="billing-option-label">
+                      Send my funds via Paypal
+                    </div>
+                    <div className="login-input-wrap" style={{marginBottom: '32px'}}>
+                      <div className="login-input__icon">
+                        <img src={require("../images/icons8-paypal-50.png")} />
+                      </div>
+                      <div className="login-input__input">
+                        <input
+                          onChange={e =>
+                            this.setState({ publicationName: e.target.value })
+                          }
+                          placeholder="Paypal email address"
+                          type="text"
+                        />
+                      </div>
                     </div>
 
-                    <div className="billing-option">
-                      <img src={require("../images/icons8-check-book-50.png")} />
-                      <div className="billing-option__text">We'd like to be sent a check</div>
+
+                    <div className="billing-option-label">
+                      I'd like a check mailed to me
                     </div>
+                    <div className="login-input-wrap">
+                      <div className="login-input__icon">
+                        <img src={require("../images/icons8-check-book-50.png")} />
+                      </div>
+                      <div className="login-input__input">
+                        <input
+                          onChange={e =>
+                            this.setState({ publicationName: e.target.value })
+                          }
+                          placeholder="Mailing address"
+                          type="text"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="login-action-wrap">
+                      <button>
+                        Save
+                      </button>
+                    </div>
+
+                    <div className="billing-option-error">
+                      This is a sample error message.
+                    </div>
+
+
 
                   </div>
 
