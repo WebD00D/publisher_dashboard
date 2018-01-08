@@ -32,7 +32,7 @@ class LoginForm extends Component {
       publicationName: "",
       email: "",
       password: "",
-      loading: false,
+      loading: false
     };
   }
 
@@ -57,6 +57,15 @@ class LoginForm extends Component {
                 );
               }.bind(this)
             );
+
+          fire
+            .database()
+            .ref(`slugs/${user.uid}`)
+            .once("value")
+            .then(function(slugs) {
+              console.log("SLUGS", slugs.val());
+              this.props.libraryActions.setSlugs(slugs.val());
+            }.bind(this));
 
           this.setState({
             loading: false,
@@ -144,17 +153,17 @@ class LoginForm extends Component {
         {this.state.hasError ? (
           <div
             style={{
-              position: 'absolute',
+              position: "absolute",
               color: "#FFFFFF",
               backgroundColor: "#C0392B",
               fontFamily: "basic-sans",
               width: "100%",
-              top: '0px',
-              height: '32px',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 1,
+              top: "0px",
+              height: "32px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1
             }}
           >
             {this.state.errorMessage}
@@ -194,10 +203,9 @@ class LoginForm extends Component {
                 fontFamily: "karmina"
               }}
             >
-
-
-              { this.state.signingUp ? "Signup for a publisher account" : "  Login to your publisher dashboard" }
-
+              {this.state.signingUp
+                ? "Signup for a publisher account"
+                : "  Login to your publisher dashboard"}
             </div>
 
             {this.state.signingUp ? (

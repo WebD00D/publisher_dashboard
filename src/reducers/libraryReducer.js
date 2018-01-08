@@ -6,7 +6,8 @@ import {
   CHANGE_PUBLICATION_NAME,
   CREATE_NEW_USER,
   SET_CURRENT_USER,
-  ADD_BILLING_INFO
+  ADD_BILLING_INFO,
+  SET_SLUGS
 } from "../actions/allActions";
 
 export default function library(state = initialState.library, action) {
@@ -63,6 +64,12 @@ export default function library(state = initialState.library, action) {
         ...state,
         billingInfoSetup: true
       };
+
+    case SET_SLUGS:
+      return {
+        ...state,
+        slugs: action.slugs
+      }
 
     case FETCH_STUFF:
       console.log("FETCH_STUFF Action");

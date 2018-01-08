@@ -6,3 +6,4 @@ export const CREATE_NEW_USER = 'CREATE_NEW_USER';
 export const SET_CURRENT_USER = 'SET_CURRENT_USER';
 
 export const ADD_BILLING_INFO = 'ADD_BILLING_INFO';
+export const SET_SLUGS = 'SET_SLUGS';

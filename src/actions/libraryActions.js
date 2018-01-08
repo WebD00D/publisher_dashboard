@@ -15,6 +15,10 @@ export function addBillingInfo(userid, paypalEmail, mailingAddress) {
   return { type: allActions.ADD_BILLING_INFO, userid: userid, paypalEmail: paypalEmail, mailingAddress: mailingAddress };
 }
 
+export function setSlugs(slugs) {
+  return { type: allActions.SET_SLUGS, slugs: slugs };
+}
+
 // THE 3 FUNCTIONS BELOW ARE JUST SAMPLES AND USED FOR REFERENCE..
 
 export function changePublicationName(pubname) {

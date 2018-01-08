@@ -17,16 +17,17 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
 
-    this._handleAccountSignIn = this._handleAccountSignIn.bind(this);
-    this._handleAccountCreation = this._handleAccountCreation.bind(this);
-    this._handleAuthentication = this._handleAuthentication.bind(this);
     this._handleBillingSetup = this._handleBillingSetup.bind(this);
+    this._handleContentAddition = this._handleContentAddition.bind(this);
+    this._updateActiveContent = this._updateActiveContent.bind(this);
+    this._handleContentDeletion = this._handleContentDeletion.bind(this);
+    this._handleEditFormOpen = this._handleEditFormOpen.bind(this);
+    this._handleContentEditing = this._handleContentEditing.bind(this);
 
     this.state = {
       paypalEmail: "",
       billingAddress: "",
       initialPayoutOptionSaved: false, // change back to false..
-
       email: "",
       password: "",
       hasError: false,
@@ -42,8 +43,139 @@ class Dashboard extends Component {
       contentURL: "",
 
       addingNewContent: false,
-      newContentPrice: "Select a Price"
+      newContentPrice: "Select a Price",
+      newContentSlug: "",
+
+      editKey: "",
+      editSlug: "",
+      editPrice: "",
+      editActive: false,
+      editFormOpen: false,
+
+      editedContentSlug: "",
+      editedContentPrice: "",
+      editedErrorMessage: ""
     };
+  }
+
+  _handleContentEditing() {
+    if (!this.state.editSlug.trim() && !this.state.editedContentSlug.trim()) {
+      this.setState({
+        editedErrorMessage: "A valid slug is required"
+      });
+      return;
+    }
+
+    if (!this.state.editPrice.trim() && !this.state.editedContentPrice.trim()) {
+      this.setState({
+        editedErrorMessage: "A valid price is required"
+      });
+      return;
+    }
+
+    let slugToUse;
+    let priceToUse;
+
+    if (!this.state.editedContentSlug.trim()) {
+      slugToUse = this.state.editSlug;
+    } else {
+      slugToUse = this.state.editedContentSlug;
+    }
+
+    if (!this.state.editedContentPrice.trim()) {
+      priceToUse = this.state.editPrice;
+    } else {
+      priceToUse = this.state.editedContentPrice;
+    }
+
+    var updates = {};
+    updates[
+      `slugs/${this.props.library.publicationId}/${this.state.editKey}/slug`
+    ] = slugToUse;
+    updates[
+      `slugs/${this.props.library.publicationId}/${this.state.editKey}/price`
+    ] = priceToUse;
+
+    fire
+      .database()
+      .ref()
+      .update(updates);
+
+    fire
+      .database()
+      .ref(`slugs/${this.props.library.publicationId}`)
+      .once("value")
+      .then(
+        function(slugs) {
+          console.log("SLUGS", slugs.val());
+          this.props.libraryActions.setSlugs(slugs.val());
+        }.bind(this)
+      );
+
+    this.setState({
+      editFormOpen: false
+    });
+  }
+
+  _handleEditFormOpen(key, slug, price, isActive) {
+    this.setState({
+      editKey: key,
+      editSlug: slug,
+      editPrice: price,
+      editActive: isActive,
+      editFormOpen: true
+    });
+  }
+
+  _handleContentDeletion(key) {
+    fire
+      .database()
+      .ref(`slugs/${this.props.library.publicationId}/${key}`)
+      .remove();
+
+    fire
+      .database()
+      .ref(`slugs/${this.props.library.publicationId}`)
+      .once("value")
+      .then(
+        function(slugs) {
+          console.log("SLUGS", slugs.val());
+          this.props.libraryActions.setSlugs(slugs.val());
+        }.bind(this)
+      );
+  }
+
+  _handleContentAddition() {
+    const publisherId = this.props.library.publicationId;
+    const dateId = Date.now();
+
+    var updates = {};
+    updates[`slugs/${publisherId}/${dateId}/slug`] = this.state.newContentSlug;
+    updates[
+      `slugs/${publisherId}/${dateId}/price`
+    ] = this.state.newContentPrice;
+    updates[`slugs/${publisherId}/${dateId}/active`] = false;
+
+    fire
+      .database()
+      .ref()
+      .update(updates);
+
+    fire
+      .database()
+      .ref(`slugs/${publisherId}`)
+      .once("value")
+      .then(
+        function(slugs) {
+          console.log("SLUGS", slugs.val());
+          this.props.libraryActions.setSlugs(slugs.val());
+        }.bind(this)
+      );
+
+    this.setState({
+      addingNewContent: false,
+      newContentPrice: "Select a Price"
+    });
   }
 
   _handleBillingSetup() {
@@ -61,7 +193,6 @@ class Dashboard extends Component {
       return;
     } else {
       // at least one is filled out. But now we've got to make sure it's only one.
-
       if (sendCheckToAddress.trim() && paypalEmail.trim()) {
         this.setState({
           errorMessage: "Please complete only one payout option."
@@ -86,108 +217,84 @@ class Dashboard extends Component {
     }
   }
 
-  _handleAccountSignIn() {
-    fire
-      .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
-      .then(
-        function(user) {
-          fire
-            .database()
-            .ref("publications/" + user.uid)
-            .once("value")
-            .then(
-              function(snapshot) {
-                console.log("SIGN IN SNAPSHOT", snapshot.val());
-                this.props.libraryActions.setCurrentUser(
-                  user.uid,
-                  snapshot.val().email,
-                  snapshot.val().publication
-                );
-              }.bind(this)
-            );
+  _updateActiveContent(isCurrentlyActive, key) {
+    let active;
+    isCurrentlyActive ? (active = false) : (active = true);
 
-          this.setState({
-            loading: false,
-            hasError: false
-          });
-        }.bind(this)
-      )
-      .catch(
-        function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-
-          this.setState({
-            errorMessage,
-            loading: false,
-            hasError: true
-          });
-
-          // ...
-        }.bind(this)
-      );
-  }
-
-  _handleAccountCreation() {
-    console.log(
-      `creating account with user ${this.state.email}, and password: ${
-        this.state.password
-      }`
-    );
+    var updates = {};
+    updates[`slugs/${this.props.library.publicationId}/${key}/active`] = active;
 
     fire
-      .auth()
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .database()
+      .ref()
+      .update(updates);
+
+    fire
+      .database()
+      .ref(`slugs/${this.props.library.publicationId}`)
+      .once("value")
       .then(
-        function(user) {
-          const newUser = fire.auth().currentUser;
-
-          this.props.libraryActions.createNewUser(
-            user.uid,
-            this.state.email,
-            this.state.publicationName
-          );
-
-          this.setState({
-            loading: false,
-            hasError: false
-          });
-
-          // WILL NEED TO HIT AN API TO SEND WELCOME EMAIL. ( using PostMark ) ...
-        }.bind(this)
-      )
-      .catch(
-        function(error) {
-          // handle errors.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(
-            `encountered an error with code ${errorCode}, and message ${
-              errorMessage
-            }`
-          );
-          this.setState({
-            errorMessage: errorMessage,
-            loading: false,
-            hasError: true
-          });
+        function(slugs) {
+          console.log("SLUGS", slugs.val());
+          this.props.libraryActions.setSlugs(slugs.val());
         }.bind(this)
       );
-  }
-
-  _handleAuthentication() {
-    this.setState({
-      loading: true
-    });
-
-    this.state.signingIn
-      ? this._handleAccountSignIn()
-      : this._handleAccountCreation();
   }
 
   render() {
+    // GET THE LIST OF SLUGS...
+
+    let slugListToDisplay;
+
+    if (!this.props.library.slugs || this.props.library.slugs.length == 0) {
+      slugListToDisplay = (
+        <div className="publisher-content__row">
+          <div className="slug">No content has been added!</div>
+        </div>
+      );
+    } else {
+      const slugs = this.props.library.slugs;
+      slugListToDisplay = Object.keys(this.props.library.slugs).map(
+        function(key) {
+          console.log(slugs[key]);
+
+          const isActive = slugs[key].active;
+
+          return (
+            <div key={key} className="publisher-content__row">
+              <div className="slug">{slugs[key].slug}</div>
+              <div className="price">{slugs[key].price}</div>
+              <div className="is-active">
+                <input
+                  className="styled-checkbox"
+                  id={key}
+                  type="checkbox"
+                  checked={isActive}
+                  onChange={() => this._updateActiveContent(isActive, key)}
+                />
+                <label htmlFor={key} />
+              </div>
+              <i
+                onClick={() =>
+                  this._handleEditFormOpen(
+                    key,
+                    slugs[key].slug,
+                    slugs[key].price,
+                    isActive
+                  )
+                }
+                className="fa fa-pencil-square-o edit-content"
+              />
+              <i
+                onClick={() => this._handleContentDeletion(key)}
+                className="fa fa-close delete-content"
+              />
+            </div>
+          );
+        }.bind(this)
+      );
+    }
+
     return (
       <div className="App">
         <div className="dashboard">
@@ -228,7 +335,13 @@ class Dashboard extends Component {
             {this.state.addingNewContent ? (
               <div className="add-content-wrap">
                 <div className="add-content-form">
-
+                  <div className="add-content-title">Add Content</div>
+                  <div
+                    onClick={() => this.setState({ addingNewContent: false })}
+                    style={{ position: "absolute", right: "40px", top: "40px" }}
+                  >
+                    <i className="fa fa-close" />
+                  </div>
 
                   <div className="login-input-wrap">
                     <div className="login-input__icon">
@@ -237,9 +350,9 @@ class Dashboard extends Component {
                     <div className="login-input__input">
                       <input
                         onChange={e =>
-                          this.setState({ contentURL: e.target.value })
+                          this.setState({ newContentSlug: e.target.value })
                         }
-                        placeholder="Content URL"
+                        placeholder="Content Slug"
                         type="text"
                       />
                     </div>
@@ -250,11 +363,19 @@ class Dashboard extends Component {
                       <img src={require("../images/icons8-money-50.png")} />
                     </div>
                     <div className="login-input__input">
-                      <select className={cx({ "greyed-out": this.state.newContentPrice === "Select a Price" })} >
+                      <select
+                        onChange={e =>
+                          this.setState({ newContentPrice: e.target.value })
+                        }
+                        className={cx({
+                          "greyed-out":
+                            this.state.newContentPrice === "Select a Price"
+                        })}
+                      >
                         <option>Select a Price</option>
                         <option>$0.20 USD</option>
                         <option>$0.30 USD</option>
-                        <option>$0.45 USD</option>
+                        <option>$0.40 USD</option>
                         <option>$0.50 USD</option>
                         <option>$0.60 USD</option>
                         <option>$0.70 USD</option>
@@ -265,13 +386,18 @@ class Dashboard extends Component {
                     </div>
                   </div>
 
-
                   <div className="login-action-wrap">
-                    <button onClick={() => this._handleBillingSetup()}>
+                    <button onClick={() => this._handleContentAddition()}>
                       Save
                     </button>
                   </div>
 
+                  <div className="help-text">
+                    Content slug should be formatted excluding the website url.{" "}
+                    <br />
+                    Ex: www.website.com/news/article-name{" "}
+                    <i className="fa fa-long-arrow-right" /> /news/article-name
+                  </div>
                 </div>
               </div>
             ) : (
@@ -412,7 +538,12 @@ class Dashboard extends Component {
                     <div style={{ paddingLeft: "40px" }}>
                       Your Premium Content
                     </div>
-                    <button onClick={ () => this.setState({ addingNewContent: true }) } className="dashboard__button">Add New</button>
+                    <button
+                      onClick={() => this.setState({ addingNewContent: true })}
+                      className="dashboard__button"
+                    >
+                      Add New
+                    </button>
                   </div>
 
                   <div className="publisher-content">
@@ -422,117 +553,85 @@ class Dashboard extends Component {
                       <div className="is-active">Active</div>
                     </div>
 
-                    <div className="publisher-content__row">
-                      <div className="slug">
-                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                      </div>
-                      <div className="price">$0.20</div>
-                      <div className="is-active">
-                        <input
-                          className="styled-checkbox"
-                          id="styled-checkbox-1"
-                          type="checkbox"
-                          value="value1"
-                        />
-                        <label htmlFor="styled-checkbox-1" />
-                      </div>
-                    </div>
+                    {slugListToDisplay}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
 
-                    <div className="publisher-content__row">
-                      <div className="slug">
-                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                      </div>
-                      <div className="price">$0.20</div>
-                      <div className="is-active">
-                        <input
-                          className="styled-checkbox"
-                          id="styled-checkbox-2"
-                          type="checkbox"
-                          value="value1"
-                        />
-                        <label htmlFor="styled-checkbox-2" />
-                      </div>
-                    </div>
+            {this.state.editFormOpen ? (
+              <div className="add-content-wrap">
+                <div className="add-content-form">
+                  <div className="add-content-title">Edit Content </div>
+                  <div
+                    onClick={() => this.setState({ editFormOpen: false })}
+                    style={{ position: "absolute", right: "40px", top: "40px" }}
+                  >
+                    <i className="fa fa-close" />
+                  </div>
 
-                    <div className="publisher-content__row">
-                      <div className="slug">
-                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                      </div>
-                      <div className="price">$0.20</div>
-                      <div className="is-active">
-                        <input
-                          className="styled-checkbox"
-                          id="styled-checkbox-3"
-                          type="checkbox"
-                          value="value1"
-                        />
-                        <label htmlFor="styled-checkbox-3" />
-                      </div>
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-website-50.png")} />
                     </div>
+                    <div className="login-input__input">
+                      <input
+                        onChange={e =>
+                          this.setState({ editedContentSlug: e.target.value })
+                        }
+                        defaultValue={this.state.editSlug}
+                        placeholder="Content Slug"
+                        type="text"
+                      />
+                    </div>
+                  </div>
 
-                    <div className="publisher-content__row">
-                      <div className="slug">
-                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                      </div>
-                      <div className="price">$0.20</div>
-                      <div className="is-active">
-                        <input
-                          className="styled-checkbox"
-                          id="styled-checkbox-4"
-                          type="checkbox"
-                          value="value1"
-                        />
-                        <label htmlFor="styled-checkbox-4" />
-                      </div>
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-money-50.png")} />
                     </div>
+                    <div className="login-input__input">
+                      <select
+                        onChange={e =>
+                          this.setState({ editedContentPrice: e.target.value })
+                        }
+                        className={cx({
+                          "greyed-out":
+                            this.state.newContentPrice === "Select a Price"
+                        })}
+                        defaultValue={this.state.editPrice}
+                      >
+                        <option>Select a Price</option>
+                        <option>$0.20 USD</option>
+                        <option>$0.30 USD</option>
+                        <option>$0.40 USD</option>
+                        <option>$0.50 USD</option>
+                        <option>$0.60 USD</option>
+                        <option>$0.70 USD</option>
+                        <option>$0.80 USD</option>
+                        <option>$0.90 USD</option>
+                        <option>$1.00 USD</option>
+                      </select>
+                    </div>
+                  </div>
 
-                    <div className="publisher-content__row">
-                      <div className="slug">
-                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                      </div>
-                      <div className="price">$0.20</div>
-                      <div className="is-active">
-                        <input
-                          className="styled-checkbox"
-                          id="styled-checkbox-5"
-                          type="checkbox"
-                          value="value1"
-                        />
-                        <label htmlFor="styled-checkbox-5" />
-                      </div>
-                    </div>
+                  <div className="login-action-wrap">
+                    <button onClick={() => this._handleContentEditing()}>
+                      Save
+                    </button>
+                  </div>
 
-                    <div className="publisher-content__row">
-                      <div className="slug">
-                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                      </div>
-                      <div className="price">$0.20</div>
-                      <div className="is-active">
-                        <input
-                          className="styled-checkbox"
-                          id="styled-checkbox-6"
-                          type="checkbox"
-                          value="value1"
-                        />
-                        <label htmlFor="styled-checkbox-6" />
-                      </div>
-                    </div>
+                  <div className="help-text">
+                    Content slug should be formatted excluding the website url.{" "}
+                    <br />
+                    Ex: www.website.com/news/article-name{" "}
+                    <i className="fa fa-long-arrow-right" /> /news/article-name
+                  </div>
 
-                    <div className="publisher-content__row">
-                      <div className="slug">
-                        /news/jake-paterson-i-wish-john-had-a-bit-of-andy-in-him/
-                      </div>
-                      <div className="price">$0.20</div>
-                      <div className="is-active">
-                        <input
-                          className="styled-checkbox"
-                          id="styled-checkbox-7"
-                          type="checkbox"
-                          value="value1"
-                        />
-                        <label htmlFor="styled-checkbox-7" />
-                      </div>
-                    </div>
+                  <div className="billing-option-error">
+                    {this.state.editedErrorMessage}
                   </div>
                 </div>
               </div>
