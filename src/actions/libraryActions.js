@@ -7,10 +7,13 @@ export function createNewUser(userid, email, publication) {
   return { type: allActions.CREATE_NEW_USER, userId: userid , email: email, publication: publication };
 }
 
-export function setCurrentUser(userid, email, publication) {
-  return { type: allActions.SET_CURRENT_USER, userId: userid , email: email, publication: publication };
+export function setCurrentUser(userid, email, publication, billingInfoSetup) {
+  return { type: allActions.SET_CURRENT_USER, userId: userid , email: email, publication: publication, billingInfoSetup: billingInfoSetup };
 }
 
+export function addBillingInfo(userid, paypalEmail, mailingAddress) {
+  return { type: allActions.ADD_BILLING_INFO, userid: userid, paypalEmail: paypalEmail, mailingAddress: mailingAddress };
+}
 
 // THE 3 FUNCTIONS BELOW ARE JUST SAMPLES AND USED FOR REFERENCE..
 

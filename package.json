@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "classnames": "^2.2.5",
     "firebase": "^4.8.0",
     "paypal-checkout": "^4.0.171",
     "react": "^16.2.0",

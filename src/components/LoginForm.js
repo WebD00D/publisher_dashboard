@@ -52,7 +52,8 @@ class LoginForm extends Component {
                 this.props.libraryActions.setCurrentUser(
                   user.uid,
                   snapshot.val().email,
-                  snapshot.val().publication
+                  snapshot.val().publication,
+                  snapshot.val().billingInfoSetup
                 );
               }.bind(this)
             );

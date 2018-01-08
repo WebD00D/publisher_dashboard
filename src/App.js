@@ -30,12 +30,7 @@ class App extends Component {
     return (
       <div className="App">
         {!this.props.library.authenticated ? <LoginForm /> : ""}
-
         {this.props.library.authenticated ? <Dashboard /> : ""}
-
-
-
-
       </div>
     );
   }

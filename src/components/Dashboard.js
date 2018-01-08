@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as libraryActions from "../actions/libraryActions";
 import PropTypes from "prop-types";
+import cx from "classnames";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -18,10 +19,14 @@ class Dashboard extends Component {
 
     this._handleAccountSignIn = this._handleAccountSignIn.bind(this);
     this._handleAccountCreation = this._handleAccountCreation.bind(this);
-
     this._handleAuthentication = this._handleAuthentication.bind(this);
+    this._handleBillingSetup = this._handleBillingSetup.bind(this);
 
     this.state = {
+      paypalEmail: "",
+      billingAddress: "",
+      initialPayoutOptionSaved: false, // change back to false..
+
       email: "",
       password: "",
       hasError: false,
@@ -36,8 +41,49 @@ class Dashboard extends Component {
       loading: false,
       contentURL: "",
 
-      addingNewContent: false
+      addingNewContent: false,
+      newContentPrice: "Select a Price"
     };
+  }
+
+  _handleBillingSetup() {
+    const sendCheckToAddress = this.state.billingAddress;
+    const paypalEmail = this.state.paypalEmail;
+
+    // ..In firebase we're going to always be updating .. currentPayoutMethod..
+    // ..We can also be saving / creating / updating endpoints for paypalEmail, and mailingAddress..
+    // ..First thing is to check to make sure we've got at least one, and only one type filled out..
+
+    if (!sendCheckToAddress.trim() && !paypalEmail.trim()) {
+      this.setState({
+        errorMessage: "A valid Paypal email or mailing address is required."
+      });
+      return;
+    } else {
+      // at least one is filled out. But now we've got to make sure it's only one.
+
+      if (sendCheckToAddress.trim() && paypalEmail.trim()) {
+        this.setState({
+          errorMessage: "Please complete only one payout option."
+        });
+        return;
+      } else {
+        // update firebase here, and update props..
+        console.log("publication id", this.props.library.publicationId);
+
+        this.props.libraryActions.addBillingInfo(
+          this.props.library.publicationId,
+          this.state.paypalEmail,
+          this.state.billingAddress
+        );
+
+        return;
+        this.setState({
+          errorMessage: "",
+          initialPayoutOptionSaved: true
+        });
+      }
+    }
   }
 
   _handleAccountSignIn() {
@@ -182,6 +228,8 @@ class Dashboard extends Component {
             {this.state.addingNewContent ? (
               <div className="add-content-wrap">
                 <div className="add-content-form">
+
+
                   <div className="login-input-wrap">
                     <div className="login-input__icon">
                       <img src={require("../images/icons8-website-50.png")} />
@@ -196,6 +244,34 @@ class Dashboard extends Component {
                       />
                     </div>
                   </div>
+
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-money-50.png")} />
+                    </div>
+                    <div className="login-input__input">
+                      <select className={cx({ "greyed-out": this.state.newContentPrice === "Select a Price" })} >
+                        <option>Select a Price</option>
+                        <option>$0.20 USD</option>
+                        <option>$0.30 USD</option>
+                        <option>$0.45 USD</option>
+                        <option>$0.50 USD</option>
+                        <option>$0.60 USD</option>
+                        <option>$0.70 USD</option>
+                        <option>$0.80 USD</option>
+                        <option>$0.90 USD</option>
+                        <option>$1.00 USD</option>
+                      </select>
+                    </div>
+                  </div>
+
+
+                  <div className="login-action-wrap">
+                    <button onClick={() => this._handleBillingSetup()}>
+                      Save
+                    </button>
+                  </div>
+
                 </div>
               </div>
             ) : (
@@ -214,25 +290,33 @@ class Dashboard extends Component {
                     </div>
                   </div>
                   <div className="dashboard__content-subtitle">
-                    <div style={{ paddingLeft: "40px", opacity: 0.6, marginTop: "12px" }}>
-                      Before you get started, tell us how you'd like to get your monthly payouts.
+                    <div
+                      style={{
+                        paddingLeft: "40px",
+                        opacity: 0.6,
+                        marginTop: "12px"
+                      }}
+                    >
+                      Before you get started, tell us how you'd like to get your
+                      monthly payouts.
                     </div>
                   </div>
 
                   <div className="billing-options">
-
-
                     <div className="billing-option-label">
                       Send my funds via Paypal
                     </div>
-                    <div className="login-input-wrap" style={{marginBottom: '32px'}}>
+                    <div
+                      className="login-input-wrap"
+                      style={{ marginBottom: "32px" }}
+                    >
                       <div className="login-input__icon">
                         <img src={require("../images/icons8-paypal-50.png")} />
                       </div>
                       <div className="login-input__input">
                         <input
                           onChange={e =>
-                            this.setState({ publicationName: e.target.value })
+                            this.setState({ paypalEmail: e.target.value })
                           }
                           placeholder="Paypal email address"
                           type="text"
@@ -240,18 +324,19 @@ class Dashboard extends Component {
                       </div>
                     </div>
 
-
                     <div className="billing-option-label">
                       I'd like a check mailed to me
                     </div>
                     <div className="login-input-wrap">
                       <div className="login-input__icon">
-                        <img src={require("../images/icons8-check-book-50.png")} />
+                        <img
+                          src={require("../images/icons8-check-book-50.png")}
+                        />
                       </div>
                       <div className="login-input__input">
                         <input
                           onChange={e =>
-                            this.setState({ publicationName: e.target.value })
+                            this.setState({ billingAddress: e.target.value })
                           }
                           placeholder="Mailing address"
                           type="text"
@@ -260,29 +345,74 @@ class Dashboard extends Component {
                     </div>
 
                     <div className="login-action-wrap">
-                      <button>
+                      <button onClick={() => this._handleBillingSetup()}>
                         Save
                       </button>
                     </div>
 
                     <div className="billing-option-error">
-                      This is a sample error message.
+                      {this.state.errorMessage}
                     </div>
-
-
-
                   </div>
-
                 </div>
               </div>
             ) : (
+              ""
+            )}
+
+            {/* this part should only ever be shown once, after they complete their initia billing info stuff.. by default initialPayoutOptionSaved is false. */}
+
+            {this.props.library.billingInfoSetup &&
+            this.state.initialPayoutOptionSaved ? (
+              <div className="dashboard__content">
+                <div className="dashboard__block">
+                  <div className="dashboard__content-title">
+                    <div style={{ paddingLeft: "40px" }}>
+                      Got it! Your payout info has been updated.
+                    </div>
+                  </div>
+                  <div className="dashboard__content-subtitle">
+                    <div
+                      style={{
+                        paddingLeft: "40px",
+                        opacity: 0.6,
+                        marginTop: "12px"
+                      }}
+                    >
+                      Ready to add your first piece of content?
+                    </div>
+                  </div>
+                  <div
+                    className="login-action-wrap"
+                    style={{
+                      marginLeft: "40px",
+                      marginTop: "12px",
+                      borderBottom: "none"
+                    }}
+                  >
+                    <button
+                      onClick={() =>
+                        this.setState({ initialPayoutOptionSaved: false })
+                      }
+                    >
+                      Let's get to it
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {this.props.library.billingInfoSetup &&
+            !this.state.initialPayoutOptionSaved ? (
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
                     <div style={{ paddingLeft: "40px" }}>
                       Your Premium Content
                     </div>
-                    <button className="dashboard__button">Add New</button>
+                    <button onClick={ () => this.setState({ addingNewContent: true }) } className="dashboard__button">Add New</button>
                   </div>
 
                   <div className="publisher-content">
@@ -406,6 +536,8 @@ class Dashboard extends Component {
                   </div>
                 </div>
               </div>
+            ) : (
+              ""
             )}
           </div>
         </div>{" "}

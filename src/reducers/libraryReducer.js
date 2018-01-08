@@ -5,7 +5,8 @@ import {
   RECEIVE_STUFF,
   CHANGE_PUBLICATION_NAME,
   CREATE_NEW_USER,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
+  ADD_BILLING_INFO
 } from "../actions/allActions";
 
 export default function library(state = initialState.library, action) {
@@ -22,7 +23,6 @@ export default function library(state = initialState.library, action) {
           publication: action.publication,
           billingInfoSetup: false
         });
-
       return {
         ...state,
         authenticated: true,
@@ -37,7 +37,8 @@ export default function library(state = initialState.library, action) {
         authenticated: true,
         email: action.email,
         publication: action.publication,
-        publicationId: action.userId
+        publicationId: action.userId,
+        billingInfoSetup: action.billingInfoSetup
       };
 
     case CHANGE_PUBLICATION_NAME:
@@ -46,6 +47,23 @@ export default function library(state = initialState.library, action) {
         ...state,
         publication: action.name
       };
+
+    case ADD_BILLING_INFO:
+      var updates = {};
+      updates[`publications/${action.userid}/billingInfoSetup`] = true;
+      updates[`publications/${action.userid}/paypalEmail`] = action.paypalEmail;
+      updates[`publications/${action.userid}/mailingAddress`] = action.mailingAddress;
+
+      fire
+        .database()
+        .ref()
+        .update(updates);
+
+      return {
+        ...state,
+        billingInfoSetup: true
+      };
+
     case FETCH_STUFF:
       console.log("FETCH_STUFF Action");
       return action;
