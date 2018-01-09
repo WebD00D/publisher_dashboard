@@ -5,6 +5,9 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "firebase": "^4.8.0",
+    "lodash": "^4.17.4",
+    "moment": "^2.20.1",
+    "moment-timezone": "^0.5.14",
     "paypal-checkout": "^4.0.171",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

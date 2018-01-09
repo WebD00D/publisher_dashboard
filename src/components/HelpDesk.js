@@ -11,7 +11,7 @@ import { bindActionCreators } from "redux";
 import * as libraryActions from "../actions/libraryActions";
 import PropTypes from "prop-types";
 
-class Account extends Component {
+class HelpDesk extends Component {
   constructor(props) {
     super(props);
 
@@ -125,87 +125,31 @@ class Account extends Component {
       <div>
         <div
           className="dashboard__content-subtitle"
-          style={{ opacity: 0.5, marginTop: "12px" }}
+          style={{ opacity: 0.5, marginTop: "0px" }}
         >
-          View & update your account information
+         Have questions? We've got answers.
         </div>
         <div style={{ marginTop: "25px" }}>
-          <div className="login-input-wrap">
-            <div className="login-input__icon">
-              <img src={require("../images/icons8-magazine-50.png")} />
-            </div>
-            <div className="login-input__input">
-              <input
-                onChange={e =>
-                  this.setState({ publicationName: e.target.value })
-                }
-                placeholder="Publication Name"
-                defaultValue={this.props.library.publication}
-                type="text"
-              />
-            </div>
+
+
+          <div className="question-block">
+            <div className="question">Lorem ipsum dolar set amit?</div>
+            <div className="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</div>
           </div>
 
-          <div className="login-input-wrap">
-            <div className="login-input__icon">
-              <img src={require("../images/icons8-email-filled-50.png")} />
-            </div>
-            <div className="login-input__input">
-              <input
-                onChange={e =>
-                  this.setState({ loginEmailAddress: e.target.value })
-                }
-                placeholder="Login Email Address"
-                defaultValue={this.props.library.accountEmail}
-                type="text"
-              />
-            </div>
+          <div className="question-block">
+            <div className="question">Lorem ipsum dolar set amit?</div>
+            <div className="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</div>
           </div>
 
-          <div className="login-input-wrap">
-            <div className="login-input__icon">
-              <img src={require("../images/icons8-paypal-50.png")} />
-            </div>
-            <div className="login-input__input">
-              <input
-                onChange={e => this.setState({ paypal: e.target.value })}
-                placeholder="Paypal Email Address"
-                type="text"
-                defaultValue={this.props.library.paypalEmail}
-              />
-            </div>
+          <div className="question-block">
+            <div className="question">Lorem ipsum dolar set amit?</div>
+            <div className="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</div>
           </div>
 
-          <div className="login-input-wrap">
-            <div className="login-input__icon">
-              <img src={require("../images/icons8-check-book-50.png")} />
-            </div>
-            <div className="login-input__input">
-              <input
-                onChange={e =>
-                  this.setState({ mailingAddress: e.target.value })
-                }
-                placeholder="Mailing Address"
-                type="text"
-                defaultValue={this.props.library.mailingAddress}
-              />
-            </div>
-          </div>
 
-          <div
-            className="send-pass-reset"
-            onClick={() => this._sendPasswordReset()}
-          >
-            {this.state.passResetText}
-          </div>
 
-          <div className="login-action-wrap">
-            <button onClick={() => this._handleAccountUpdates()}>Save</button>
-          </div>
 
-          <div className="billing-option-error">
-            {this.state.accountErrorMessage}
-          </div>
         </div>
       </div>
     );
@@ -224,4 +168,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Account);
+export default connect(mapStateToProps, mapDispatchToProps)(HelpDesk);

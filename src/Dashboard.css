@@ -64,16 +64,18 @@
   padding-right: 40px;
   width: 100%;
   text-align: left;
+  overflow: scroll;
 }
 
 .dashboard__block {
   margin-top: 40px;
-  max-width: 800px;
+  max-width: 900px;
   width: 100%;
   background-color: white;
   border-radius: 4px;
   padding-top: 40px;
   padding-bottom: 40px;
+  margin-bottom: 60px;
 }
 
 .dashboard__content-title {
@@ -173,13 +175,18 @@
   padding-bottom: 8px;
 }
 
+.date-added {
+  width: 15%;
+}
+
 .slug {
-  width: 60%;
+  width: 45%;
   overflow: hidden;
 }
 
 .price {
   width: 20%;
+  padding-left: 12px;
 }
 
 .is-active {
@@ -345,4 +352,24 @@ li {
 .send-pass-reset:hover {
   cursor: pointer;
   opacity: 0.6;
+}
+
+
+.question-block {
+  margin-bottom: 22px;
+  display:flex;
+  flex-direction: column;
+  padding-right: 40px;
+}
+
+.question {
+  font-size: 18px;
+  margin-bottom: 0px;
+  font-family: "basic-sans";
+}
+
+.answer {
+  font-size: 16px;
+  font-family: "karmina";
+  opacity: 0.5;
 }

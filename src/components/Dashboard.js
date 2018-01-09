@@ -12,8 +12,11 @@ import { bindActionCreators } from "redux";
 import * as libraryActions from "../actions/libraryActions";
 import PropTypes from "prop-types";
 import cx from "classnames";
+import _ from "lodash";
+import moment from "moment";
 
 import Account from "./Account";
+import HelpDesk from "./HelpDesk";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -260,12 +263,16 @@ class Dashboard extends Component {
       const slugs = this.props.library.slugs;
       slugListToDisplay = Object.keys(this.props.library.slugs).map(
         function(key) {
-          console.log(slugs[key]);
+          console.log(key);
 
           const isActive = slugs[key].active;
 
           return (
             <div key={key} className="publisher-content__row">
+              <div className="date-added">
+                {" "}
+                {moment.unix(key / 1000).format("MM/DD/YY hh:mm a")}
+              </div>
               <div className="slug">{slugs[key].slug}</div>
               <div className="price">{slugs[key].price}</div>
               <div className="is-active">
@@ -340,7 +347,18 @@ class Dashboard extends Component {
               >
                 Content
               </div>
-              <div className="dashboard__menu-item ">Help Desk</div>
+              <div
+                onClick={() => this.setState({ activeTab: "Help" })}
+                className={cx([
+                  "dashboard__menu-item",
+                  {
+                    "dashboard__menu-item--active":
+                      this.state.activeTab === "Help"
+                  }
+                ])}
+              >
+                Help Desk
+              </div>
               <div
                 onClick={() => this.setState({ activeTab: "Account" })}
                 className={cx([
@@ -576,12 +594,13 @@ class Dashboard extends Component {
 
                   <div className="publisher-content">
                     <div className="publisher-content__headline">
+                      <div className="date-added">Date</div>
                       <div className="slug">Content URL</div>
                       <div className="price">Price</div>
                       <div className="is-active">Active</div>
                     </div>
 
-                    {slugListToDisplay}
+                    {_.reverse(slugListToDisplay)}
                   </div>
                 </div>
               </div>
@@ -671,13 +690,26 @@ class Dashboard extends Component {
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
-                    <div style={{ paddingLeft: "40px" }}>
-                      My Account
-                    </div>
+                    <div style={{ paddingLeft: "40px" }}>My Account</div>
                   </div>
-                   <div style={{paddingLeft: "40px"}}>
+                  <div style={{ paddingLeft: "40px" }}>
                     <Account />
-                   </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {this.state.activeTab === "Help" ? (
+              <div className="dashboard__content">
+                <div className="dashboard__block">
+                  <div className="dashboard__content-title">
+                    <div style={{ paddingLeft: "40px" }}>Help Desk</div>
+                  </div>
+                  <div style={{ paddingLeft: "40px" }}>
+                    <HelpDesk />
+                  </div>
                 </div>
               </div>
             ) : (
@@ -688,7 +720,6 @@ class Dashboard extends Component {
           </div>
         </div>{" "}
         {/* end dashboard */}
-
       </div>
     );
   }
