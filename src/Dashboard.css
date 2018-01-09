@@ -162,6 +162,14 @@
   font-family: "basic-sans";
 }
 
+.billing-option-success {
+  margin-bottom: 12px;
+  margin-top: 24px;
+  font-size: 16px;
+  color: green;
+  font-family: "basic-sans";
+}
+
 .publisher-content {
   margin-left: 40px;
   margin-right: 40px;

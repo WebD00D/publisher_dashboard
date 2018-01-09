@@ -23,7 +23,8 @@ class Account extends Component {
       paypal: "",
       mailingAddress: "",
       accountErrorMessage: "",
-      passResetText: "I want to change my password"
+      passResetText: "I want to change my password",
+      successMessage: ""
     };
   }
 
@@ -45,14 +46,15 @@ class Account extends Component {
               .ref()
               .update(updates);
 
-              console.log("account email updated")
+            console.log("account email updated");
           }.bind(this)
         )
         .catch(
           function(error) {
             // An error happened...
             this.setState({
-              accountErrorMessage: error
+              accountErrorMessage: error,
+              successMessage: "",
             });
           }.bind(this)
         );
@@ -64,7 +66,10 @@ class Account extends Component {
         `publications/${this.props.library.publicationId}/publication`
       ] = this.state.publicationName;
 
-      fire.database().ref().update(pubNameUpdates)
+      fire
+        .database()
+        .ref()
+        .update(pubNameUpdates);
       console.log("pub name updated");
     }
 
@@ -74,7 +79,10 @@ class Account extends Component {
         `publications/${this.props.library.publicationId}/paypalEmail`
       ] = this.state.paypal;
 
-      fire.database().ref().update(paypalUpdates)
+      fire
+        .database()
+        .ref()
+        .update(paypalUpdates);
       console.log("pay pal updated");
     }
 
@@ -84,17 +92,54 @@ class Account extends Component {
         `publications/${this.props.library.publicationId}/mailingAddress`
       ] = this.state.mailingAddress;
 
-      fire.database().ref().update(mailingUpdates)
+      fire
+        .database()
+        .ref()
+        .update(mailingUpdates);
       console.log("mailing updated");
     }
 
+    this.setState({
+      successMessage: "Account details saved!"
+    })
 
+    if ( !this.state.accountErrorMessage.trim() ) {
+
+      fire
+        .database()
+        .ref("publications/" + this.props.library.publicationId)
+        .once("value")
+        .then(
+          function(snapshot) {
+            console.log("SIGN IN SNAPSHOT", snapshot.val());
+
+            let paypalEmail;
+            let mailingAddress;
+
+            snapshot.val().paypalEmail
+              ? (paypalEmail = snapshot.val().paypalEmail)
+              : (paypalEmail = "");
+            snapshot.val().mailingAddress
+              ? (mailingAddress = snapshot.val().mailingAddress)
+              : (mailingAddress = "");
+
+            this.props.libraryActions.setCurrentUser(
+              this.props.library.publicationId,
+              snapshot.val().email,
+              snapshot.val().publication,
+              snapshot.val().billingInfoSetup,
+              paypalEmail,
+              mailingAddress
+            );
+          }.bind(this)
+        );
+
+    }
 
 
   } // end _handleAccountUpdates
 
   _sendPasswordReset() {
-
     const accountEmail = this.props.library.accountEmail;
     var auth = fire.auth();
 
@@ -114,7 +159,8 @@ class Account extends Component {
         function(error) {
           // An error happened.
           this.setState({
-            accountErrorMessage: error.message
+            accountErrorMessage: error.message,
+            successMessage: ""
           });
         }.bind(this)
       );
@@ -204,7 +250,14 @@ class Account extends Component {
           </div>
 
           <div className="billing-option-error">
-            {this.state.accountErrorMessage}
+            {this.state.accountErrorMessage && !this.state.successMessage.trim()
+              ? this.state.accountErrorMessage
+              : ""}
+          </div>
+          <div className="billing-option-success">
+            {this.state.successMessage && !this.state.accountErrorMessage.trim()
+              ? this.state.successMessage
+              : ""}
           </div>
         </div>
       </div>
