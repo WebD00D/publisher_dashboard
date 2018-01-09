@@ -37,9 +37,12 @@ export default function library(state = initialState.library, action) {
         ...state,
         authenticated: true,
         email: action.email,
+        accountEmail: action.email,
         publication: action.publication,
         publicationId: action.userId,
-        billingInfoSetup: action.billingInfoSetup
+        billingInfoSetup: action.billingInfoSetup,
+        paypalEmail: action.paypal,
+        mailingAddress: action.mailing
       };
 
     case CHANGE_PUBLICATION_NAME:

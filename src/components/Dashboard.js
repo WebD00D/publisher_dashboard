@@ -13,6 +13,8 @@ import * as libraryActions from "../actions/libraryActions";
 import PropTypes from "prop-types";
 import cx from "classnames";
 
+import Account from "./Account";
+
 class Dashboard extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +27,8 @@ class Dashboard extends Component {
     this._handleContentEditing = this._handleContentEditing.bind(this);
 
     this.state = {
+      activeTab: "Content",
+
       paypalEmail: "",
       billingAddress: "",
       initialPayoutOptionSaved: false, // change back to false..
@@ -324,15 +328,36 @@ class Dashboard extends Component {
           </div>
           <div className="dashboard__body">
             <div className="dashboard__menu">
-              <div className="dashboard__menu-item dashboard__menu-item--active">
+              <div
+                onClick={() => this.setState({ activeTab: "Content" })}
+                className={cx([
+                  "dashboard__menu-item",
+                  {
+                    "dashboard__menu-item--active":
+                      this.state.activeTab === "Content"
+                  }
+                ])}
+              >
                 Content
               </div>
               <div className="dashboard__menu-item ">Help Desk</div>
-              <div className="dashboard__menu-item ">My Account</div>
+              <div
+                onClick={() => this.setState({ activeTab: "Account" })}
+                className={cx([
+                  "dashboard__menu-item",
+                  {
+                    "dashboard__menu-item--active":
+                      this.state.activeTab === "Account"
+                  }
+                ])}
+              >
+                My Account
+              </div>
               <div className="dashboard__menu-item ">Sign Out</div>
             </div>
 
-            {this.state.addingNewContent ? (
+            {this.state.activeTab === "Content" &&
+            this.state.addingNewContent ? (
               <div className="add-content-wrap">
                 <div className="add-content-form">
                   <div className="add-content-title">Add Content</div>
@@ -407,7 +432,8 @@ class Dashboard extends Component {
             {/* If billingInfoSetup is false, show them setup  */}
             {/* either add Paypal email, or addressee and address so we can send them a check */}
 
-            {!this.props.library.billingInfoSetup ? (
+            {this.state.activeTab === "Content" &&
+            !this.props.library.billingInfoSetup ? (
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
@@ -488,7 +514,8 @@ class Dashboard extends Component {
 
             {/* this part should only ever be shown once, after they complete their initia billing info stuff.. by default initialPayoutOptionSaved is false. */}
 
-            {this.props.library.billingInfoSetup &&
+            {this.state.activeTab === "Content" &&
+            this.props.library.billingInfoSetup &&
             this.state.initialPayoutOptionSaved ? (
               <div className="dashboard__content">
                 <div className="dashboard__block">
@@ -530,7 +557,8 @@ class Dashboard extends Component {
               ""
             )}
 
-            {this.props.library.billingInfoSetup &&
+            {this.state.activeTab === "Content" &&
+            this.props.library.billingInfoSetup &&
             !this.state.initialPayoutOptionSaved ? (
               <div className="dashboard__content">
                 <div className="dashboard__block">
@@ -561,7 +589,7 @@ class Dashboard extends Component {
               ""
             )}
 
-            {this.state.editFormOpen ? (
+            {this.state.activeTab === "Content" && this.state.editFormOpen ? (
               <div className="add-content-wrap">
                 <div className="add-content-form">
                   <div className="add-content-title">Edit Content </div>
@@ -638,9 +666,29 @@ class Dashboard extends Component {
             ) : (
               ""
             )}
+
+            {this.state.activeTab === "Account" ? (
+              <div className="dashboard__content">
+                <div className="dashboard__block">
+                  <div className="dashboard__content-title">
+                    <div style={{ paddingLeft: "40px" }}>
+                      My Account
+                    </div>
+                  </div>
+                   <div style={{paddingLeft: "40px"}}>
+                    <Account />
+                   </div>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+
           </div>
         </div>{" "}
         {/* end dashboard */}
+
       </div>
     );
   }

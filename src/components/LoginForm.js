@@ -30,6 +30,7 @@ class LoginForm extends Component {
       signingUp: false,
       helpText: "Forgot password?",
       publicationName: "",
+      accountEmail: "",
       email: "",
       password: "",
       loading: false
@@ -49,11 +50,20 @@ class LoginForm extends Component {
             .then(
               function(snapshot) {
                 console.log("SIGN IN SNAPSHOT", snapshot.val());
+
+                let paypalEmail;
+                let mailingAddress;
+
+                snapshot.val().paypalEmail ? paypalEmail = snapshot.val().paypalEmail : paypalEmail = "";
+                snapshot.val().mailingAddress ? mailingAddress = snapshot.val().mailingAddress : mailingAddress = "";
+
                 this.props.libraryActions.setCurrentUser(
                   user.uid,
                   snapshot.val().email,
                   snapshot.val().publication,
-                  snapshot.val().billingInfoSetup
+                  snapshot.val().billingInfoSetup,
+                  paypalEmail,
+                  mailingAddress
                 );
               }.bind(this)
             );
