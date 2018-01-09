@@ -50,7 +50,7 @@ class LoginForm extends Component {
             .once("value")
             .then(
               function(snapshot) {
-                console.log("SIGN IN SNAPSHOT", snapshot.val());
+
 
                 let paypalEmail;
                 let mailingAddress;
@@ -79,7 +79,7 @@ class LoginForm extends Component {
             .once("value")
             .then(
               function(slugs) {
-                console.log("SLUGS", slugs.val());
+
                 this.props.libraryActions.setSlugs(slugs.val());
               }.bind(this)
             );
@@ -108,11 +108,7 @@ class LoginForm extends Component {
   }
 
   _handleAccountCreation() {
-    console.log(
-      `creating account with user ${this.state.email}, and password: ${
-        this.state.password
-      }`
-    );
+
 
     fire
       .auth()
@@ -140,11 +136,7 @@ class LoginForm extends Component {
           // handle errors.
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(
-            `encountered an error with code ${errorCode}, and message ${
-              errorMessage
-            }`
-          );
+
           this.setState({
             errorMessage: errorMessage,
             loading: false,
@@ -179,7 +171,7 @@ class LoginForm extends Component {
         )
         .catch(
           function(error) {
-            console.log(error);
+
             this.setState({
               loading: false,
               hasError: true,

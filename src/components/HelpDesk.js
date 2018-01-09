@@ -44,8 +44,6 @@ class HelpDesk extends Component {
               .database()
               .ref()
               .update(updates);
-
-            console.log("account email updated");
           }.bind(this)
         )
         .catch(
@@ -68,7 +66,6 @@ class HelpDesk extends Component {
         .database()
         .ref()
         .update(pubNameUpdates);
-      console.log("pub name updated");
     }
 
     if (this.state.paypal.trim()) {
@@ -81,7 +78,6 @@ class HelpDesk extends Component {
         .database()
         .ref()
         .update(paypalUpdates);
-      console.log("pay pal updated");
     }
 
     if (this.state.mailingAddress.trim()) {
@@ -94,7 +90,6 @@ class HelpDesk extends Component {
         .database()
         .ref()
         .update(mailingUpdates);
-      console.log("mailing updated");
     }
   } // end _handleAccountUpdates
 

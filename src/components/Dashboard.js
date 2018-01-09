@@ -119,7 +119,6 @@ class Dashboard extends Component {
       .once("value")
       .then(
         function(slugs) {
-          console.log("SLUGS", slugs.val());
           this.props.libraryActions.setSlugs(slugs.val());
         }.bind(this)
       );
@@ -151,7 +150,6 @@ class Dashboard extends Component {
       .once("value")
       .then(
         function(slugs) {
-          console.log("SLUGS", slugs.val());
           this.props.libraryActions.setSlugs(slugs.val());
         }.bind(this)
       );
@@ -179,7 +177,6 @@ class Dashboard extends Component {
       .once("value")
       .then(
         function(slugs) {
-          console.log("SLUGS", slugs.val());
           this.props.libraryActions.setSlugs(slugs.val());
         }.bind(this)
       );
@@ -212,7 +209,6 @@ class Dashboard extends Component {
         return;
       } else {
         // update firebase here, and update props..
-        console.log("publication id", this.props.library.publicationId);
 
         this.props.libraryActions.addBillingInfo(
           this.props.library.publicationId,
@@ -247,15 +243,12 @@ class Dashboard extends Component {
       .once("value")
       .then(
         function(slugs) {
-          console.log("SLUGS", slugs.val());
           this.props.libraryActions.setSlugs(slugs.val());
         }.bind(this)
       );
   }
 
   render() {
-    // GET THE LIST OF SLUGS...
-
     let slugListToDisplay;
 
     if (!this.props.library.slugs || this.props.library.slugs.length == 0) {
@@ -268,8 +261,6 @@ class Dashboard extends Component {
       const slugs = this.props.library.slugs;
       slugListToDisplay = Object.keys(this.props.library.slugs).map(
         function(key) {
-          console.log(key);
-
           const isActive = slugs[key].active;
 
           return (
@@ -376,7 +367,12 @@ class Dashboard extends Component {
               >
                 My Account
               </div>
-              <div onClick={ () => this._handleSignOut()} className="dashboard__menu-item ">Sign Out</div>
+              <div
+                onClick={() => this._handleSignOut()}
+                className="dashboard__menu-item "
+              >
+                Sign Out
+              </div>
             </div>
 
             {this.state.activeTab === "Content" &&
@@ -720,8 +716,6 @@ class Dashboard extends Component {
             ) : (
               ""
             )}
-
-
           </div>
         </div>{" "}
         {/* end dashboard */}

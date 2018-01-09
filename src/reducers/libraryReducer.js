@@ -47,7 +47,6 @@ export default function library(state = initialState.library, action) {
       };
 
     case CHANGE_PUBLICATION_NAME:
-      console.log("PUBLICATION NAME CHANGE ACTION", action.name);
       return {
         ...state,
         publication: action.name
@@ -80,27 +79,13 @@ export default function library(state = initialState.library, action) {
       fire
         .auth()
         .signOut()
-        .then(
-          function() {
-            console.log("Signed Out");
-          },
-          function(error) {
-            console.error("Sign Out Error", error);
-          }
-        );
+        .then(function() {}, function(error) {});
 
       return {
         ...state,
         authenticated: false
       };
 
-    case FETCH_STUFF:
-      console.log("FETCH_STUFF Action");
-      return action;
-    case RECEIVE_STUFF:
-      newState = action.stuff;
-      console.log("RECEIVE_STUFF Action");
-      return newState;
     default:
       return state;
   }

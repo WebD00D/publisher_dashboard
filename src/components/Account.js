@@ -45,8 +45,6 @@ class Account extends Component {
               .database()
               .ref()
               .update(updates);
-
-            console.log("account email updated");
           }.bind(this)
         )
         .catch(
@@ -54,7 +52,7 @@ class Account extends Component {
             // An error happened...
             this.setState({
               accountErrorMessage: error,
-              successMessage: "",
+              successMessage: ""
             });
           }.bind(this)
         );
@@ -70,7 +68,6 @@ class Account extends Component {
         .database()
         .ref()
         .update(pubNameUpdates);
-      console.log("pub name updated");
     }
 
     if (this.state.paypal.trim()) {
@@ -83,7 +80,6 @@ class Account extends Component {
         .database()
         .ref()
         .update(paypalUpdates);
-      console.log("pay pal updated");
     }
 
     if (this.state.mailingAddress.trim()) {
@@ -96,23 +92,19 @@ class Account extends Component {
         .database()
         .ref()
         .update(mailingUpdates);
-      console.log("mailing updated");
     }
 
     this.setState({
       successMessage: "Account details saved!"
-    })
+    });
 
-    if ( !this.state.accountErrorMessage.trim() ) {
-
+    if (!this.state.accountErrorMessage.trim()) {
       fire
         .database()
         .ref("publications/" + this.props.library.publicationId)
         .once("value")
         .then(
           function(snapshot) {
-            console.log("SIGN IN SNAPSHOT", snapshot.val());
-
             let paypalEmail;
             let mailingAddress;
 
@@ -133,10 +125,7 @@ class Account extends Component {
             );
           }.bind(this)
         );
-
     }
-
-
   } // end _handleAccountUpdates
 
   _sendPasswordReset() {
