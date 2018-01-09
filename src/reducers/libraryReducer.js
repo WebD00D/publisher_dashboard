@@ -7,7 +7,8 @@ import {
   CREATE_NEW_USER,
   SET_CURRENT_USER,
   ADD_BILLING_INFO,
-  SET_SLUGS
+  SET_SLUGS,
+  SIGNOUT_USER
 } from "../actions/allActions";
 
 export default function library(state = initialState.library, action) {
@@ -56,7 +57,8 @@ export default function library(state = initialState.library, action) {
       var updates = {};
       updates[`publications/${action.userid}/billingInfoSetup`] = true;
       updates[`publications/${action.userid}/paypalEmail`] = action.paypalEmail;
-      updates[`publications/${action.userid}/mailingAddress`] = action.mailingAddress;
+      updates[`publications/${action.userid}/mailingAddress`] =
+        action.mailingAddress;
 
       fire
         .database()
@@ -72,7 +74,25 @@ export default function library(state = initialState.library, action) {
       return {
         ...state,
         slugs: action.slugs
-      }
+      };
+
+    case SIGNOUT_USER:
+      fire
+        .auth()
+        .signOut()
+        .then(
+          function() {
+            console.log("Signed Out");
+          },
+          function(error) {
+            console.error("Sign Out Error", error);
+          }
+        );
+
+      return {
+        ...state,
+        authenticated: false
+      };
 
     case FETCH_STUFF:
       console.log("FETCH_STUFF Action");

@@ -33,7 +33,8 @@ class LoginForm extends Component {
       accountEmail: "",
       email: "",
       password: "",
-      loading: false
+      loading: false,
+      forgotPass: false
     };
   }
 
@@ -54,8 +55,12 @@ class LoginForm extends Component {
                 let paypalEmail;
                 let mailingAddress;
 
-                snapshot.val().paypalEmail ? paypalEmail = snapshot.val().paypalEmail : paypalEmail = "";
-                snapshot.val().mailingAddress ? mailingAddress = snapshot.val().mailingAddress : mailingAddress = "";
+                snapshot.val().paypalEmail
+                  ? (paypalEmail = snapshot.val().paypalEmail)
+                  : (paypalEmail = "");
+                snapshot.val().mailingAddress
+                  ? (mailingAddress = snapshot.val().mailingAddress)
+                  : (mailingAddress = "");
 
                 this.props.libraryActions.setCurrentUser(
                   user.uid,
@@ -72,10 +77,12 @@ class LoginForm extends Component {
             .database()
             .ref(`slugs/${user.uid}`)
             .once("value")
-            .then(function(slugs) {
-              console.log("SLUGS", slugs.val());
-              this.props.libraryActions.setSlugs(slugs.val());
-            }.bind(this));
+            .then(
+              function(slugs) {
+                console.log("SLUGS", slugs.val());
+                this.props.libraryActions.setSlugs(slugs.val());
+              }.bind(this)
+            );
 
           this.setState({
             loading: false,
@@ -152,9 +159,39 @@ class LoginForm extends Component {
       loading: true
     });
 
-    this.state.signingIn
-      ? this._handleAccountSignIn()
-      : this._handleAccountCreation();
+    if (this.state.forgotPass) {
+      const accountEmail = this.state.email;
+      var auth = fire.auth();
+
+      auth
+        .sendPasswordResetEmail(accountEmail)
+        .then(
+          function() {
+            this.setState({
+              loading: false,
+              hasError: false,
+              errorMessage: "",
+              forgotPass: false,
+              helpText: "Forgot password?",
+              buttonText: "Login"
+            });
+          }.bind(this)
+        )
+        .catch(
+          function(error) {
+            console.log(error);
+            this.setState({
+              loading: false,
+              hasError: true,
+              errorMessage: error.message
+            });
+          }.bind(this)
+        );
+    } else {
+      this.state.signingIn
+        ? this._handleAccountSignIn()
+        : this._handleAccountCreation();
+    }
   }
 
   render() {
@@ -213,9 +250,15 @@ class LoginForm extends Component {
                 fontFamily: "karmina"
               }}
             >
-              {this.state.signingUp
-                ? "Signup for a publisher account"
-                : "  Login to your publisher dashboard"}
+              {!this.state.forgotPass ? (
+                <div>
+                  {this.state.signingUp
+                    ? "Signup for a publisher account"
+                    : "  Login to your publisher dashboard"}
+                </div>
+              ) : (
+                "Enter your account email, and we'll send a reset link."
+              )}
             </div>
 
             {this.state.signingUp ? (
@@ -250,21 +293,47 @@ class LoginForm extends Component {
               </div>
             </div>
 
-            <div className="login-input-wrap">
-              <div className="login-input__icon">
-                <img src={require("../images/icons8-key-50.png")} />
+            {!this.state.forgotPass ? (
+              <div className="login-input-wrap">
+                <div className="login-input__icon">
+                  <img src={require("../images/icons8-key-50.png")} />
+                </div>
+                <div className="login-input__input">
+                  <input
+                    onChange={e => this.setState({ password: e.target.value })}
+                    placeholder="Password"
+                    type="password"
+                  />
+                </div>
               </div>
-              <div className="login-input__input">
-                <input
-                  onChange={e => this.setState({ password: e.target.value })}
-                  placeholder="Password"
-                  type="password"
-                />
-              </div>
-            </div>
+            ) : (
+              ""
+            )}
 
             <div className="login-action-wrap">
-              <a className="help-link" href="#">
+              <a
+                onClick={() => {
+                  if (this.state.forgotPass) {
+                    this.setState({
+                      forgotPass: false,
+                      helpText: "Forgot password?",
+                      buttonText: "Login",
+                      errorMessage: "",
+                      hasError: false
+                    });
+                  } else {
+                    this.setState({
+                      forgotPass: true,
+                      helpText: "Nevermind, I remember now",
+                      buttonText: "Send",
+                      errorMessage: "",
+                      hasError: false
+                    });
+                  }
+                }}
+                className="help-link"
+                href="#"
+              >
                 {this.state.helpText}
               </a>
               <button onClick={() => this._handleAuthentication()}>
@@ -280,7 +349,9 @@ class LoginForm extends Component {
                     signingIn: false,
                     signingUp: true,
                     buttonText: "Sign Up",
-                    helpText: "Need some help?"
+                    helpText: "",
+                    errorMessage: "",
+                    hasError: false
                   })
                 }
                 className="other-action-link"
@@ -295,7 +366,9 @@ class LoginForm extends Component {
                     signingIn: true,
                     signingUp: false,
                     buttonText: "Login",
-                    helpText: "Forgot password?"
+                    helpText: "Forgot password?",
+                    errorMessage: "",
+                    hasError: false
                   })
                 }
                 className="other-action-link"

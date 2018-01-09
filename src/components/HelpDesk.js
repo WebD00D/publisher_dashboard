@@ -131,7 +131,6 @@ class HelpDesk extends Component {
         </div>
         <div style={{ marginTop: "25px" }}>
 
-
           <div className="question-block">
             <div className="question">Lorem ipsum dolar set amit?</div>
             <div className="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</div>
@@ -146,9 +145,6 @@ class HelpDesk extends Component {
             <div className="question">Lorem ipsum dolar set amit?</div>
             <div className="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation</div>
           </div>
-
-
-
 
         </div>
       </div>

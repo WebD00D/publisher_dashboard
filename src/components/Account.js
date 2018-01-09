@@ -114,7 +114,7 @@ class Account extends Component {
         function(error) {
           // An error happened.
           this.setState({
-            accountErrorMessage: error
+            accountErrorMessage: error.message
           });
         }.bind(this)
       );

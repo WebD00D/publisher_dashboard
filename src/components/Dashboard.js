@@ -28,6 +28,7 @@ class Dashboard extends Component {
     this._handleContentDeletion = this._handleContentDeletion.bind(this);
     this._handleEditFormOpen = this._handleEditFormOpen.bind(this);
     this._handleContentEditing = this._handleContentEditing.bind(this);
+    this._handleSignOut = this._handleSignOut.bind(this);
 
     this.state = {
       activeTab: "Content",
@@ -63,6 +64,10 @@ class Dashboard extends Component {
       editedContentPrice: "",
       editedErrorMessage: ""
     };
+  }
+
+  _handleSignOut() {
+    this.props.libraryActions.signoutUser();
   }
 
   _handleContentEditing() {
@@ -371,7 +376,7 @@ class Dashboard extends Component {
               >
                 My Account
               </div>
-              <div className="dashboard__menu-item ">Sign Out</div>
+              <div onClick={ () => this._handleSignOut()} className="dashboard__menu-item ">Sign Out</div>
             </div>
 
             {this.state.activeTab === "Content" &&

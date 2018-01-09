@@ -19,6 +19,10 @@ export function setSlugs(slugs) {
   return { type: allActions.SET_SLUGS, slugs: slugs };
 }
 
+export function signoutUser() {
+  return { type: allActions.SIGNOUT_USER };
+}
+
 // THE 3 FUNCTIONS BELOW ARE JUST SAMPLES AND USED FOR REFERENCE..
 
 export function changePublicationName(pubname) {
