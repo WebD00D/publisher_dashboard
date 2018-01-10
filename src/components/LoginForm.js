@@ -33,7 +33,6 @@ class LoginForm extends Component {
       accountEmail: "",
       email: "",
       password: "",
-      loading: false,
       forgotPass: false
     };
   }
@@ -50,8 +49,6 @@ class LoginForm extends Component {
             .once("value")
             .then(
               function(snapshot) {
-
-
                 let paypalEmail;
                 let mailingAddress;
 
@@ -79,7 +76,6 @@ class LoginForm extends Component {
             .once("value")
             .then(
               function(slugs) {
-
                 this.props.libraryActions.setSlugs(slugs.val());
               }.bind(this)
             );
@@ -108,8 +104,6 @@ class LoginForm extends Component {
   }
 
   _handleAccountCreation() {
-
-
     fire
       .auth()
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -171,7 +165,6 @@ class LoginForm extends Component {
         )
         .catch(
           function(error) {
-
             this.setState({
               loading: false,
               hasError: true,
