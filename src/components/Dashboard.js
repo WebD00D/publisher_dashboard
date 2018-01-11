@@ -53,16 +53,19 @@ class Dashboard extends Component {
       addingNewContent: false,
       newContentPrice: "Select a Price",
       newContentSlug: "",
+      newContentAudioURL: "",
 
       editKey: "",
       editSlug: "",
       editPrice: "",
+      editAudio: "",
       editActive: false,
       editFormOpen: false,
 
       editedContentSlug: "",
       editedContentPrice: "",
-      editedErrorMessage: ""
+      editedContentAudioURL: "",
+      editedErrorMessage: "",
     };
   }
 
@@ -87,6 +90,7 @@ class Dashboard extends Component {
 
     let slugToUse;
     let priceToUse;
+    let audioToUse;
 
     if (!this.state.editedContentSlug.trim()) {
       slugToUse = this.state.editSlug;
@@ -100,6 +104,12 @@ class Dashboard extends Component {
       priceToUse = this.state.editedContentPrice;
     }
 
+    if (!this.state.editedContentAudioURL.trim()) {
+      audioToUse = this.state.editAudio;
+    } else {
+      audioToUse = this.state.editedContentAudioURL;
+    }
+
     var updates = {};
     updates[
       `slugs/${this.props.library.publicationId}/${this.state.editKey}/slug`
@@ -107,6 +117,9 @@ class Dashboard extends Component {
     updates[
       `slugs/${this.props.library.publicationId}/${this.state.editKey}/price`
     ] = priceToUse;
+    updates[
+      `slugs/${this.props.library.publicationId}/${this.state.editKey}/audio`
+    ] = audioToUse;
 
     fire
       .database()
@@ -128,12 +141,13 @@ class Dashboard extends Component {
     });
   }
 
-  _handleEditFormOpen(key, slug, price, isActive) {
+  _handleEditFormOpen(key, slug, price, audio, isActive) {
     this.setState({
       editKey: key,
       editSlug: slug,
       editPrice: price,
       editActive: isActive,
+      editAudio: audio,
       editFormOpen: true
     });
   }
@@ -164,6 +178,7 @@ class Dashboard extends Component {
     updates[
       `slugs/${publisherId}/${dateId}/price`
     ] = this.state.newContentPrice;
+    updates[`slugs/${publisherId}/${dateId}/audio`] = this.state.newContentAudioURL;
     updates[`slugs/${publisherId}/${dateId}/active`] = false;
 
     fire
@@ -267,9 +282,10 @@ class Dashboard extends Component {
             <div key={key} className="publisher-content__row">
               <div className="date-added">
                 {" "}
-                {moment.unix(key / 1000).format("MM/DD/YY hh:mm a")}
+                {moment.unix(key / 1000).format("MM/DD/YY")}
               </div>
               <div className="slug">{slugs[key].slug}</div>
+              <div className="audio">{slugs[key].audio}</div>
               <div className="price">{slugs[key].price}</div>
               <div className="is-active">
                 <input
@@ -287,6 +303,7 @@ class Dashboard extends Component {
                     key,
                     slugs[key].slug,
                     slugs[key].price,
+                    slugs[key].audio,
                     isActive
                   )
                 }
@@ -427,6 +444,21 @@ class Dashboard extends Component {
                         <option>$0.90 USD</option>
                         <option>$1.00 USD</option>
                       </select>
+                    </div>
+                  </div>
+
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-website-50.png")} />
+                    </div>
+                    <div className="login-input__input">
+                      <input
+                        onChange={e =>
+                          this.setState({ newContentAudioURL: e.target.value })
+                        }
+                        placeholder="Audio URL"
+                        type="text"
+                      />
                     </div>
                   </div>
 
@@ -597,6 +629,7 @@ class Dashboard extends Component {
                     <div className="publisher-content__headline">
                       <div className="date-added">Date</div>
                       <div className="slug">Content URL</div>
+                      <div className="audio">Audio</div>
                       <div className="price">Price</div>
                       <div className="is-active">Active</div>
                     </div>
@@ -662,6 +695,22 @@ class Dashboard extends Component {
                         <option>$0.90 USD</option>
                         <option>$1.00 USD</option>
                       </select>
+                    </div>
+                  </div>
+
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-website-50.png")} />
+                    </div>
+                    <div className="login-input__input">
+                      <input
+                        onChange={e =>
+                          this.setState({ editedContentAudioURL: e.target.value })
+                        }
+                        defaultValue={this.state.editAudio}
+                        placeholder="Audio URL"
+                        type="text"
+                      />
                     </div>
                   </div>
 

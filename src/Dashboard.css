@@ -184,21 +184,25 @@
 }
 
 .date-added {
-  width: 15%;
+  width: 13%;
 }
 
 .slug {
-  width: 45%;
+  width: 30%;
   overflow: hidden;
 }
 
+.audio {
+  width: 30%;
+}
+
 .price {
-  width: 20%;
+  width: 13%;
   padding-left: 12px;
 }
 
 .is-active {
-  width: 20%;
+  width: 13%;
 }
 
 .publisher-content__row {
