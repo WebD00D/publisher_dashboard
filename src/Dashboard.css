@@ -29,7 +29,7 @@
 
 .dashboard__menu {
   position: fixed;
-  width: 300px;
+  width: 200px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -60,7 +60,7 @@
 }
 
 .dashboard__content {
-  padding-left: 340px;
+  padding-left: 240px;
   padding-right: 40px;
   width: 100%;
   text-align: left;
@@ -69,7 +69,7 @@
 
 .dashboard__block {
   margin-top: 40px;
-  max-width: 900px;
+  max-width: 1100px;
   width: 100%;
   background-color: white;
   border-radius: 4px;
@@ -184,11 +184,11 @@
 }
 
 .date-added {
-  width: 13%;
+  width: 15%;
 }
 
 .slug {
-  width: 30%;
+  width: 40%;
   overflow: hidden;
 }
 
@@ -197,7 +197,7 @@
 }
 
 .price {
-  width: 13%;
+  width: 20%;
   padding-left: 12px;
 }
 
@@ -211,7 +211,9 @@
   font-family: "karmina";
   border-bottom: 1px solid rgba(01, 01, 01, 0.1);
   display: flex;
-  height: 48px;
+  min-height: 48px;
+  padding-top: 8px;
+  padding-bottom: 8px;
   display: flex;
   align-items: center;
 }

@@ -54,14 +54,17 @@ class Dashboard extends Component {
       newContentPrice: "Select a Price",
       newContentSlug: "",
       newContentAudioURL: "",
+      newContentTitle: "",
 
       editKey: "",
       editSlug: "",
       editPrice: "",
+      editTitle: "",
       editAudio: "",
       editActive: false,
       editFormOpen: false,
 
+      editedContentTitle: "",
       editedContentSlug: "",
       editedContentPrice: "",
       editedContentAudioURL: "",
@@ -91,6 +94,7 @@ class Dashboard extends Component {
     let slugToUse;
     let priceToUse;
     let audioToUse;
+    let titleToUse;
 
     if (!this.state.editedContentSlug.trim()) {
       slugToUse = this.state.editSlug;
@@ -110,6 +114,12 @@ class Dashboard extends Component {
       audioToUse = this.state.editedContentAudioURL;
     }
 
+    if (!this.state.editedContentTitle.trim()) {
+      titleToUse = this.state.editTitle;
+    } else {
+      titleToUse = this.state.editedContentTitle;
+    }
+
     var updates = {};
     updates[
       `slugs/${this.props.library.publicationId}/${this.state.editKey}/slug`
@@ -120,6 +130,10 @@ class Dashboard extends Component {
     updates[
       `slugs/${this.props.library.publicationId}/${this.state.editKey}/audio`
     ] = audioToUse;
+
+    updates[
+      `slugs/${this.props.library.publicationId}/${this.state.editKey}/title`
+    ] = titleToUse;
 
     fire
       .database()
@@ -141,13 +155,14 @@ class Dashboard extends Component {
     });
   }
 
-  _handleEditFormOpen(key, slug, price, audio, isActive) {
+  _handleEditFormOpen(key, slug, price, audio, isActive, title) {
     this.setState({
       editKey: key,
       editSlug: slug,
       editPrice: price,
       editActive: isActive,
       editAudio: audio,
+      editTitle: title,
       editFormOpen: true
     });
   }
@@ -180,6 +195,7 @@ class Dashboard extends Component {
     ] = this.state.newContentPrice;
     updates[`slugs/${publisherId}/${dateId}/audio`] = this.state.newContentAudioURL;
     updates[`slugs/${publisherId}/${dateId}/active`] = false;
+    updates[`slugs/${publisherId}/${dateId}/title`] = this.state.newContentTitle;
 
     fire
       .database()
@@ -284,8 +300,7 @@ class Dashboard extends Component {
                 {" "}
                 {moment.unix(key / 1000).format("MM/DD/YY")}
               </div>
-              <div className="slug">{slugs[key].slug}</div>
-              <div className="audio">{slugs[key].audio}</div>
+              <div className="slug">{slugs[key].title}</div>
               <div className="price">{slugs[key].price}</div>
               <div className="is-active">
                 <input
@@ -304,7 +319,8 @@ class Dashboard extends Component {
                     slugs[key].slug,
                     slugs[key].price,
                     slugs[key].audio,
-                    isActive
+                    isActive,
+                    slugs[key].title
                   )
                 }
                 className="fa fa-pencil-square-o edit-content"
@@ -402,6 +418,22 @@ class Dashboard extends Component {
                     style={{ position: "absolute", right: "40px", top: "40px" }}
                   >
                     <i className="fa fa-close" />
+                  </div>
+
+
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-edit-50.png")} />
+                    </div>
+                    <div className="login-input__input">
+                      <input
+                        onChange={e =>
+                          this.setState({ newContentTitle: e.target.value })
+                        }
+                        placeholder="Display Title"
+                        type="text"
+                      />
+                    </div>
                   </div>
 
                   <div className="login-input-wrap">
@@ -628,8 +660,7 @@ class Dashboard extends Component {
                   <div className="publisher-content">
                     <div className="publisher-content__headline">
                       <div className="date-added">Date</div>
-                      <div className="slug">Content URL</div>
-                      <div className="audio">Audio</div>
+                      <div className="slug">Title</div>
                       <div className="price">Price</div>
                       <div className="is-active">Active</div>
                     </div>
@@ -651,6 +682,22 @@ class Dashboard extends Component {
                     style={{ position: "absolute", right: "40px", top: "40px" }}
                   >
                     <i className="fa fa-close" />
+                  </div>
+
+                  <div className="login-input-wrap">
+                    <div className="login-input__icon">
+                      <img src={require("../images/icons8-edit-50.png")} />
+                    </div>
+                    <div className="login-input__input">
+                      <input
+                        onChange={e =>
+                          this.setState({ editedContentTitle: e.target.value })
+                        }
+                        defaultValue={this.state.editTitle}
+                        placeholder="Display Title"
+                        type="text"
+                      />
+                    </div>
                   </div>
 
                   <div className="login-input-wrap">
