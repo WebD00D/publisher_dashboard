@@ -224,7 +224,7 @@ class LoginForm extends Component {
                 fontFamily: "basic-sans"
               }}
             >
-              The Library
+              Quiet Corner
             </div>
             <div
               style={{
@@ -389,7 +389,7 @@ class LoginForm extends Component {
                 fontFamily: "karmina"
               }}
             >
-              The Library's Publisher Dashboard
+              Quiet Corner's Publisher Dashboard
             </div>
           </div>
         </div>
@@ -428,7 +428,7 @@ class LoginForm extends Component {
             >
               <div style={{ paddingLeft: "20px" }}>
                 <div style={{ fontWeight: "400", color: "#FFFFFF" }}>
-                  The Library
+                  Quiet Corner
                 </div>
               </div>
 

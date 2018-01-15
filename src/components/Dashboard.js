@@ -348,7 +348,7 @@ class Dashboard extends Component {
                 paddingLeft: "40px"
               }}
             >
-              The Library
+              Quiet Corner
             </div>
             <div
               style={{
