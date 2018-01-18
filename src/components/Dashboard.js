@@ -17,6 +17,7 @@ import moment from "moment";
 
 import Account from "./Account";
 import HelpDesk from "./HelpDesk";
+import CodeSnippet from "./CodeSnippet";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -401,12 +402,26 @@ class Dashboard extends Component {
                 My Account
               </div>
               <div
+                onClick={() => this.setState({ activeTab: "code" })}
+                className={cx([
+                  "dashboard__menu-item",
+                  {
+                    "dashboard__menu-item--active":
+                      this.state.activeTab === "code"
+                  }
+                ])}
+              >
+                Embed Code
+              </div>
+              <div
                 onClick={() => this._handleSignOut()}
                 className="dashboard__menu-item "
               >
                 Sign Out
               </div>
             </div>
+
+
 
             {this.state.activeTab === "Content" &&
             this.state.addingNewContent ? (
@@ -791,6 +806,21 @@ class Dashboard extends Component {
                   </div>
                   <div style={{ paddingLeft: "40px" }}>
                     <Account />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
+
+            {this.state.activeTab === "code" ? (
+              <div className="dashboard__content">
+                <div className="dashboard__block">
+                  <div className="dashboard__content-title">
+                    <div style={{ paddingLeft: "40px" }}>Embed Code </div>
+                  </div>
+                  <div style={{ paddingLeft: "40px" }}>
+                  <CodeSnippet />
                   </div>
                 </div>
               </div>
