@@ -122,15 +122,10 @@ class HelpDesk extends Component {
   render() {
     return (
       <div>
-        <div
-          className="dashboard__content-subtitle"
-          style={{ opacity: 0.5, marginTop: "0px" }}
-        >
-          Have questions? We've got answers.
-        </div>
+
         <div style={{ marginTop: "25px" }}>
           <div className="question-block">
-            <div className="question">Why do I need to use The Library?</div>
+            <div className="question">Why do I need to use Quiet Corner?</div>
             <div className="answer">
               You don’t. Media is in a very tricky place, however. Once upon a
               time our models were a mix of advertising and reader contribution.
@@ -160,7 +155,7 @@ class HelpDesk extends Component {
           <div className="question-block">
             <div className="question">How should I price my story?</div>
             <div className="answer">
-              The Library is about quality storytelling. It should be special.
+              Quite Corner is about quality storytelling. It should be special.
               And, we suggest that stories should represent far more value than
               they are priced. Does a 20c story represent $1 value? The answer
               here is, of course, arbitrary. Our guiding principle is that we
@@ -182,7 +177,7 @@ class HelpDesk extends Component {
           <div className="question-block">
             <div className="question">How do I add a new story?</div>
             <div className="answer">
-              Share the URL on the Library dashboard and set your price, and
+              Share the URL on Quite Corner dashboard and set your price, and
               select ACTIVE.
             </div>
           </div>
@@ -194,9 +189,9 @@ class HelpDesk extends Component {
             </div>
             <div className="answer">
               Yes there is. If a story is live, the paywall won’t exist until
-              it’s active on The Library dashboard. To have it live
-              instantaneously with The Library paywall pop-up, load your story
-              as a draft and share that URL on The Library dashboard. That way
+              it’s active on Quite Corner dashboard. To have it live
+              instantaneously with Quite Corner paywall pop-up, load your story
+              as a draft and share that URL on Quite Corner dashboard. That way
               you’ll ensure the story always has a password.
             </div>
           </div>
@@ -206,7 +201,7 @@ class HelpDesk extends Component {
               I want to include advertising on my story. How do I?
             </div>
             <div className="answer">
-              Sorry, the Library exists to preserve the art of storytelling.
+              Sorry, Quite Corner exists to preserve the art of storytelling.
               It’s about a culturally ravenous audience investing in quality. No
               fluff, no ads. A skilled developer may try to get around our tech
               and insert a kind of advertising functionality. If so, we will
@@ -266,13 +261,13 @@ class HelpDesk extends Component {
           <div className="question-block">
             <div className="question">How do I delete a story?</div>
             <div className="answer">
-              Deleting a story will happen in your own CMS not on The Library.
+              Deleting a story will happen in your own CMS not on Quite Corner.
             </div>
           </div>
 
           <div className="question-block">
             <div className="question">
-              Does The Library and the paywall affect my google ranking?
+              Does Quite Corner and the paywall affect my google ranking?
             </div>
             <div className="answer">
               No, Google will pick up as usual. It’s google search ranking maybe
@@ -283,13 +278,13 @@ class HelpDesk extends Component {
 
           <div className="question-block">
             <div className="question">
-              Can The Library put a full-time subscription paywall on my site?
+              Can Quite Corner put a full-time subscription paywall on my site?
             </div>
             <div className="answer">
               No, we want our audiences to feel guilty in the same way you do
               when you have a gym membership when you’re not using it enough. No
               one likes direct debits. We don’t do that here. We’re pay-by-play.
-              The Library is a micro-paywall that allows you to buy the best
+              Quite Corner is a micro-paywall that allows you to buy the best
               media on your phone or desktop – without ads.{" "}
             </div>
           </div>
@@ -302,7 +297,7 @@ class HelpDesk extends Component {
               No, we want our audiences to feel guilty in the same way you do
               when you have a gym membership when you’re not using it enough. No
               one likes direct debits. We don’t do that here. We’re pay-by-play.
-              The Library is a micro-paywall that allows you to buy the best
+              Quite Corner is a micro-paywall that allows you to buy the best
               media on your phone or desktop – without ads.{" "}
             </div>
           </div>
@@ -321,24 +316,24 @@ class HelpDesk extends Component {
 
           <div className="question-block">
             <div className="question">
-              How much does The Library software cost me?
+              How much does Quite Corner software cost me?
             </div>
             <div className="answer">It's free.</div>
           </div>
 
           <div className="question-block">
             <div className="question">
-              What commission does The Library take?
+              What commission does Quite Corner take?
             </div>
             <div className="answer">
-              The Library takes 10% of revenue. There are Stripe charges also
+              Quite Corner takes 10% of revenue. There are Stripe charges also
               associated.
             </div>
           </div>
 
           <div className="question-block">
             <div className="question">
-              Will The Library piss my reader’s off?
+              Will Quite Corner piss my reader’s off?
             </div>
             <div className="answer">
               Your work has likely always been free. Now it’s not. This will

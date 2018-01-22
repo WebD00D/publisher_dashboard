@@ -234,7 +234,7 @@ class Account extends Component {
             {this.state.passResetText}
           </div>
 
-          <div className="login-action-wrap">
+          <div className="login-action-wrap" style={{alignItems: 'flex-start', marginTop: '20px'}}>
             <button onClick={() => this._handleAccountUpdates()}>Save</button>
           </div>
 

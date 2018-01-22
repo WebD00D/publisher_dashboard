@@ -184,19 +184,8 @@ class LoginForm extends Component {
       <div className="App">
         {this.state.hasError ? (
           <div
-            style={{
-              position: "absolute",
-              color: "#FFFFFF",
-              backgroundColor: "#C0392B",
-              fontFamily: "basic-sans",
-              width: "100%",
-              top: "0px",
-              height: "32px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              zIndex: 1
-            }}
+            className="error-bar"
+
           >
             {this.state.errorMessage}
           </div>
@@ -216,23 +205,23 @@ class LoginForm extends Component {
           <div className="login-form">
             <div
               style={{
-                marginBottom: "12px",
+                marginBottom: "22px",
                 fontWeight: "600",
                 textAlign: "left",
                 color: "#000000",
                 fontSize: "36px",
-                fontFamily: "basic-sans"
+                fontFamily: "almaq-refined"
               }}
             >
-              Quiet Corner
+            <img className="qc-logo--lg" src={require("../images/welcome_logo.png")} />
             </div>
             <div
               style={{
                 marginBottom: "24px",
                 textAlign: "left",
-                color: "#000000",
+                color: "rgb(12,18,103)",
                 fontSize: "19px",
-                fontFamily: "karmina"
+                fontFamily: "Nunito Sans"
               }}
             >
               {!this.state.forgotPass ? (
@@ -321,7 +310,7 @@ class LoginForm extends Component {
               >
                 {this.state.helpText}
               </a>
-              <button onClick={() => this._handleAuthentication()}>
+              <button style={{backgroundColor: 'rgb(255,103,103)'}} onClick={() => this._handleAuthentication()}>
                 {this.state.buttonText}
               </button>
             </div>
@@ -363,35 +352,7 @@ class LoginForm extends Component {
             )}
           </div>{" "}
           {/* end login form */}
-          <div className="login-background">
-            <div
-              style={{
-                fontWeight: "600",
-                textAlign: "left",
-                color: "#FFFFFF",
-                fontSize: "66px",
-                fontFamily: "basic-sans",
-                letterSpacing: "1px"
-              }}
-            >
-              Preserving the true <br /> art of storytelling.
-            </div>
 
-            <div
-              style={{
-                position: "absolute",
-                bottom: "50px",
-                left: "40px",
-                fontFamily: "sans",
-                color: "#FFFFFF",
-                fontSize: "18px",
-                letterSpacing: ".25px",
-                fontFamily: "karmina"
-              }}
-            >
-              Quiet Corner's Publisher Dashboard
-            </div>
-          </div>
         </div>
 
         <div

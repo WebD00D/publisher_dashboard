@@ -341,24 +341,13 @@ class Dashboard extends Component {
         <div className="dashboard">
           <div className="dashboard__nav">
             <div
-              style={{
-                color: "#252525",
-                fontFamily: "basic-sans",
-                fontSize: "30px",
-                fontWeight: "700",
-                paddingLeft: "40px"
-              }}
+              className="dashboard__nav__title"
             >
-              Quiet Corner
+              <img className="qc-logo" src={require("../images/welcome_logo.png")} />
             </div>
             <div
-              style={{
-                color: "#252525",
-                fontFamily: "basic-sans",
-                fontSize: "20px",
-                fontWeight: "400",
-                paddingRight: "40px"
-              }}
+            className="dashboard__nav__title dashboard__nav__title--sm"
+
             >
               {this.props.library.publication}
             </div>
@@ -535,7 +524,7 @@ class Dashboard extends Component {
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
-                    <div style={{ paddingLeft: "40px" }}>
+                    <div >
                       Welcome, {this.props.library.publication}!
                     </div>
                   </div>
@@ -618,7 +607,7 @@ class Dashboard extends Component {
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
-                    <div style={{ paddingLeft: "40px" }}>
+                    <div >
                       Got it! Your payout info has been updated.
                     </div>
                   </div>
@@ -661,7 +650,7 @@ class Dashboard extends Component {
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
-                    <div style={{ paddingLeft: "40px" }}>
+                    <div>
                       Your Premium Content
                     </div>
                     <button
@@ -802,7 +791,7 @@ class Dashboard extends Component {
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
-                    <div style={{ paddingLeft: "40px" }}>My Account</div>
+                    <div>My Account</div>
                   </div>
                   <div style={{ paddingLeft: "40px" }}>
                     <Account />
@@ -817,7 +806,7 @@ class Dashboard extends Component {
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
-                    <div style={{ paddingLeft: "40px" }}>Embed Code </div>
+                    <div>Embed Code </div>
                   </div>
                   <div style={{ paddingLeft: "40px" }}>
                   <CodeSnippet />
@@ -832,7 +821,7 @@ class Dashboard extends Component {
               <div className="dashboard__content">
                 <div className="dashboard__block">
                   <div className="dashboard__content-title">
-                    <div style={{ paddingLeft: "40px" }}>Help Desk</div>
+                    <div>Help Desk</div>
                   </div>
                   <div style={{ paddingLeft: "40px" }}>
                     <HelpDesk />
