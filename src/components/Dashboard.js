@@ -295,13 +295,27 @@ class Dashboard extends Component {
         function(key) {
           const isActive = slugs[key].active;
 
+
+          let numberOfPurchases = 0;
+
+          if ( slugs[key].purchased ) {
+
+            numberOfPurchases = _.size(slugs[key].purchased);
+
+
+          }
+
+          console.log("PURCHASES", numberOfPurchases)
+
+
+
           return (
             <div key={key} className="publisher-content__row">
               <div className="date-added">
                 {" "}
                 {moment.unix(key / 1000).format("MM/DD/YY")}
               </div>
-              <div className="slug">{slugs[key].title}</div>
+              <div className="slug">{slugs[key].title} <br /> <b>Purchases:</b> {numberOfPurchases} </div>
               <div className="price">{slugs[key].price}</div>
               <div className="is-active">
                 <input
