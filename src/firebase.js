@@ -19,5 +19,5 @@ var dev = {
     messagingSenderId: "947409743016"
 }
 
-var fire = firebase.initializeApp(dev);
+var fire = firebase.initializeApp(production);
 export default fire;
